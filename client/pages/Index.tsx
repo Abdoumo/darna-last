@@ -176,6 +176,11 @@ export default function Index({ language }: IndexProps) {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 animate-slide-up">
+              <img
+                src="/logo-moumen.png"
+                alt="darna logo"
+                className="h-24 w-auto mb-4"
+              />
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 {t.hero}
               </h1>
