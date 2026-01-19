@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Plus, Package, Edit2, Trash2, X } from "lucide-react";
 import {
@@ -346,7 +347,6 @@ export default function SellerProducts({ language }: SellerProductsProps) {
             setFormData((prev) => ({ ...prev, name: e.target.value }));
           }}
           required
-          autoFocus
         />
       </div>
 
@@ -400,13 +400,14 @@ export default function SellerProducts({ language }: SellerProductsProps) {
 
       <div className="space-y-2">
         <Label htmlFor="description">{t.description}</Label>
-        <Input
+        <Textarea
           id="description"
           placeholder={t.descriptionPlaceholder}
           value={formData.description}
           onChange={(e) => {
             setFormData((prev) => ({ ...prev, description: e.target.value }));
           }}
+          rows={4}
         />
       </div>
 
