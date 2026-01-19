@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ShoppingBag, Globe, LogOut, User, ShoppingCart, MessageCircle } from "lucide-react";
+import { Menu, X, Globe, LogOut, User, ShoppingCart, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -71,9 +71,11 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-              <ShoppingBag className="w-5 h-5 text-primary-foreground" />
-            </div>
+            <img
+              src="/logo-moumen.png"
+              alt="darna logo"
+              className="h-10 w-auto"
+            />
             <span className="text-xl font-bold text-primary hidden sm:inline">
               darna
             </span>
