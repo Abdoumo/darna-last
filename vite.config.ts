@@ -1,12 +1,13 @@
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import { createRequire } from "module";
 
-// https://vitejs.dev/config/
+const require = createRequire(import.meta.url);
+
 export default defineConfig(({ command }) => {
   const plugins = [react()];
-  
-  // Only add express plugin in development (serve) mode
+
   if (command === "serve") {
     plugins.push(expressPlugin());
   }
@@ -37,11 +38,11 @@ function expressPlugin(): Plugin {
   return {
     name: "express-plugin",
     apply: "serve",
-    async configureServer(server) {
-      const { createServer } = await import("./server/index");
+    configureServer(server) {
+      // ⬇️ CRITICAL FIX
+      const { createServer } = require("./server/index");
       const app = createServer();
 
-      // Add Express app as middleware to Vite dev server
       server.middlewares.use(app);
     },
   };
