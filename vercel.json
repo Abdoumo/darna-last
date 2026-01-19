@@ -1,6 +1,6 @@
 {
   "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install",
+  "installCommand": "npm install",
   "outputDirectory": "dist/spa",
   "rewrites": [
     {
