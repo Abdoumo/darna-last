@@ -1,15 +1,14 @@
 {
   "buildCommand": "pnpm run build:client",
   "outputDirectory": "dist/spa",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
+      "source": "/api/(.*)",
       "destination": "/api"
     },
     {
-      "src": "/(.*)",
-      "destination": "/index.html",
-      "status": 200
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "env": {
