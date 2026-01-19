@@ -25,7 +25,7 @@ const mockProducts = [
     rating: 4.5,
     reviews: 320,
     seller: "TechMart",
-    image: "bg-gradient-to-br from-blue-400 to-blue-600",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop",
     category: "Electronics",
   },
   {
@@ -35,7 +35,7 @@ const mockProducts = [
     rating: 4.8,
     reviews: 150,
     seller: "Fashion Plus",
-    image: "bg-gradient-to-br from-purple-400 to-pink-600",
+    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
     category: "Fashion",
   },
   {
@@ -45,7 +45,7 @@ const mockProducts = [
     rating: 4.7,
     reviews: 450,
     seller: "ElectroHub",
-    image: "bg-gradient-to-br from-green-400 to-teal-600",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",
     category: "Electronics",
   },
   {
@@ -55,7 +55,7 @@ const mockProducts = [
     rating: 4.6,
     reviews: 280,
     seller: "CoffeeLovers",
-    image: "bg-gradient-to-br from-yellow-400 to-orange-600",
+    image: "https://images.unsplash.com/photo-1559056199-641a0ac8b3f7?w=400&h=300&fit=crop",
     category: "Food",
   },
   {
@@ -65,7 +65,7 @@ const mockProducts = [
     rating: 4.9,
     reviews: 190,
     seller: "FitLife",
-    image: "bg-gradient-to-br from-red-400 to-red-600",
+    image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&h=300&fit=crop",
     category: "Sports",
   },
   {
@@ -75,7 +75,7 @@ const mockProducts = [
     rating: 4.4,
     reviews: 220,
     seller: "HomeStyle",
-    image: "bg-gradient-to-br from-indigo-400 to-purple-600",
+    image: "https://images.unsplash.com/photo-1565636192335-14ecf9f05e39?w=400&h=300&fit=crop",
     category: "Home",
   },
   {
@@ -85,7 +85,7 @@ const mockProducts = [
     rating: 4.7,
     reviews: 380,
     seller: "SportZone",
-    image: "bg-gradient-to-br from-cyan-400 to-blue-600",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
     category: "Fashion",
   },
   {
@@ -95,7 +95,7 @@ const mockProducts = [
     rating: 4.8,
     reviews: 160,
     seller: "ChefPro",
-    image: "bg-gradient-to-br from-gray-400 to-gray-600",
+    image: "https://images.unsplash.com/photo-1593618998160-e34014e67546?w=400&h=300&fit=crop",
     category: "Home",
   },
 ];
@@ -234,7 +234,7 @@ export default function Shop({ language }: ShopProps) {
             category: p.category,
             description: p.description,
             quantity: p.quantity,
-            image: p.image || `bg-gradient-to-br from-cyan-400 to-blue-600`,
+            image: p.image || `https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop`,
           }))
         );
       } catch (error) {
@@ -337,9 +337,16 @@ export default function Shop({ language }: ShopProps) {
                   className="rounded-lg border border-border overflow-hidden hover:shadow-lg transition-all duration-300 group"
                 >
                   {/* Product Image */}
-                  <div
-                    className={`${product.image} w-full h-48 flex items-center justify-center relative group overflow-hidden`}
-                  >
+                  <div className="w-full h-48 relative group overflow-hidden bg-gray-100">
+                    {product.image && product.image.startsWith("http") ? (
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className={`${product.image} w-full h-full flex items-center justify-center`} />
+                    )}
                     <button
                       onClick={() => toggleFavorite(product.id)}
                       className="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition-all opacity-0 group-hover:opacity-100"

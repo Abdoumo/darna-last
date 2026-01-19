@@ -1,0 +1,8 @@
+server/
+dist/server/
+vite.config.server.ts
+.git/
+.env.local
+.env.*.local
+node_modules/
+pnpm-lock.yaml

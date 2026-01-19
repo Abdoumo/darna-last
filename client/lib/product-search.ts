@@ -116,53 +116,68 @@ export function detectUserIntent(message: string): {
 } {
   const lowerMessage = message.toLowerCase();
 
-  const categoryKeywords = [
-    "electronics",
-    "fashion",
-    "food",
-    "sports",
-    "home",
+  // Enhanced category keywords in multiple languages
+  const categoryMaps = {
+    electronics: ["electronics", "أجهزة الكترونية", "إلكترونيات", "électronique", "électroniques", "appareils électroniques"],
+    fashion: ["fashion", "ملابس", "موضة", "mode", "vêtements"],
+    food: ["food", "طعام", "غذاء", "nourriture", "alimentaire"],
+    sports: ["sports", "رياضة", "رياضي", "sport"],
+    home: ["home", "بيت", "منزل", "maison", "foyer"],
+  };
+
+  let detectedCategory: string | undefined;
+  for (const [category, keywords] of Object.entries(categoryMaps)) {
+    if (keywords.some((keyword) => lowerMessage.includes(keyword))) {
+      detectedCategory = category;
+      break;
+    }
+  }
+
+  // Enhanced action keywords in multiple languages
+  const actionKeywords = [
+    // English
+    "show", "what", "have", "find",
+    // French
+    "montrez", "montrer", "afficher", "quels", "avez", "chercher",
+    // Arabic
+    "اعرض", "عرض", "اسال", "سؤال", "يوجد", "بحث", "جد"
   ];
-  const detectedCategory = categoryKeywords.find((cat) =>
-    lowerMessage.includes(cat)
-  );
 
   if (
     detectedCategory &&
-    (lowerMessage.includes("show") ||
-      lowerMessage.includes("what") ||
-      lowerMessage.includes("have") ||
-      lowerMessage.includes("find"))
+    actionKeywords.some((keyword) => lowerMessage.includes(keyword))
   ) {
     return { type: "category", category: detectedCategory };
   }
 
-  if (
-    lowerMessage.includes("all products") ||
-    lowerMessage.includes("show all") ||
-    lowerMessage.includes("list all") ||
-    (lowerMessage.includes("products") && lowerMessage.includes("show"))
-  ) {
+  // Check for "show all" patterns in multiple languages
+  const allProductsPatterns = [
+    "all products", "show all", "list all",
+    "جميع المنتجات", "اعرض جميع", "كل المنتجات",
+    "tous les produits", "afficher tous", "tous"
+  ];
+
+  if (allProductsPatterns.some((pattern) => lowerMessage.includes(pattern))) {
     return { type: "all" };
   }
 
+  // Enhanced search keywords in multiple languages
   const searchKeywords = [
-    "find",
-    "show",
-    "what",
-    "have",
-    "search",
-    "looking",
-    "want",
-    "need",
+    // English
+    "find", "show", "what", "have", "search", "looking", "want", "need",
+    // French
+    "montrez", "montrer", "afficher", "chercher", "cherche", "trouvé", "veux", "besoin",
+    // Arabic
+    "اعرض", "عرض", "اسال", "سؤال", "يوجد", "بحث", "جد", "اوجد", "ريد"
   ];
+
   if (searchKeywords.some((keyword) => lowerMessage.includes(keyword))) {
     const query = message
-      .replace(/find|show|what|have|search|looking|want|need|do you/gi, "")
+      .replace(/find|show|what|have|search|looking|want|need|do you|montrez|montrer|afficher|chercher|cherche|trouvé|veux|besoin|اعرض|عرض|اسال|سؤال|يوجد|بحث|جد|اوجد|ريد/gi, "")
       .replace(/[?.,!]/g, "")
       .trim();
 
-    if (query && query.length > 2) {
+    if (query && query.length > 0) {
       return { type: "search", query };
     }
   }

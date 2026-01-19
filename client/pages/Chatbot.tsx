@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,16 +29,37 @@ interface Message {
 }
 
 export default function Chatbot({ language }: ChatbotProps) {
+  const getInitialMessage = () => {
+    const initialMessages = {
+      en: "Hello! How can I help you today? I can answer questions about products, sellers, and our platform.",
+      ar: "مرحبا! كيف يمكنني مساعدتك اليوم؟ يمكنني الإجابة على أسئلة حول المنتجات والبائعين ومنصتنا.",
+      fr: "Bonjour! Comment puis-je vous aider aujourd'hui? Je peux répondre à des questions sur les produits, les vendeurs et notre plateforme.",
+    };
+    return initialMessages[language] || initialMessages.en;
+  };
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hello! How can I help you today? I can answer questions about products, sellers, and our platform.",
+      text: getInitialMessage(),
       sender: "bot",
       timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Reset messages when language changes
+  useEffect(() => {
+    setMessages([
+      {
+        id: "1",
+        text: getInitialMessage(),
+        sender: "bot",
+        timestamp: new Date(),
+      },
+    ]);
+  }, [language]);
 
   const translations = {
     en: {
@@ -55,13 +76,16 @@ export default function Chatbot({ language }: ChatbotProps) {
       noResults: "Sorry, I didn't find any products matching that search.",
       allProducts: "Here are all our products:",
       categoryProducts: "Here are our products in the {category} category:",
+      typing: "Typing...",
+      error: "Sorry, I encountered an error. Please try again.",
+      welcome: "Hello! How can I help you today? I can answer questions about products, sellers, and our platform.",
       suggestions: [
         "Show me electronics",
         "Find fashion products",
         "Show all products",
         "What sports items do you have?",
         "Find home products",
-        "Show food items",
+        "Show renovations",
       ],
     },
     ar: {
@@ -78,13 +102,16 @@ export default function Chatbot({ language }: ChatbotProps) {
       noResults: "عذراً، لم أجد أي منتجات تطابق بحثك.",
       allProducts: "إليك جميع منتجاتنا:",
       categoryProducts: "إليك منتجاتنا في فئة {category}:",
+      typing: "جاري الكتابة...",
+      error: "عذراً، حدث خطأ. يرجى المحاولة مجدداً.",
+      welcome: "مرحبا! كيف يمكنني مساعدتك اليوم؟ يمكنني الإجابة على أسئلة حول المنتجات والبائعين ومنصتنا.",
       suggestions: [
         "اعرض لي الأجهزة الإلكترونية",
         "البحث عن منتجات الموضة",
         "اعرض جميع المنتجات",
         "ما منتجات الرياضة لديكم؟",
         "عرض منتجات المنزل",
-        "اعرض منتجات الطعام",
+        "اعرض خدمات التجديد",
       ],
     },
     fr: {
@@ -101,13 +128,16 @@ export default function Chatbot({ language }: ChatbotProps) {
       noResults: "Désolé, je n'ai pas trouvé de produits correspondant à votre recherche.",
       allProducts: "Voici tous nos produits:",
       categoryProducts: "Voici nos produits dans la catégorie {category}:",
+      typing: "En train d'écrire...",
+      error: "Désolé, j'ai rencontré une erreur. Veuillez réessayer.",
+      welcome: "Bonjour! Comment puis-je vous aider aujourd'hui? Je peux répondre à des questions sur les produits, les vendeurs et notre plateforme.",
       suggestions: [
         "Montrez-moi les produits électroniques",
         "Trouver des articles de mode",
         "Afficher tous les produits",
         "Quels articles de sport avez-vous?",
         "Afficher les produits de la maison",
-        "Afficher les articles alimentaires",
+        "Afficher les services de rénovation",
       ],
     },
   };
@@ -189,7 +219,7 @@ export default function Chatbot({ language }: ChatbotProps) {
       console.error("Error getting chat response:", error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "Sorry, I encountered an error. Please try again.",
+        text: t.error,
         sender: "bot",
         timestamp: new Date(),
       };
@@ -319,7 +349,7 @@ export default function Chatbot({ language }: ChatbotProps) {
             <div className="flex justify-start">
               <div className="bg-white text-foreground border border-border px-4 py-3 rounded-2xl rounded-bl-none flex items-center gap-2 shadow-sm">
                 <Loader className="w-4 h-4 animate-spin text-primary" />
-                <span className="text-sm">Typing...</span>
+                <span className="text-sm">{t.typing}</span>
               </div>
             </div>
           )}

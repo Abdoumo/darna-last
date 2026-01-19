@@ -202,12 +202,175 @@ export default function Index({ language }: IndexProps) {
               </div>
             </div>
             <div className="hidden md:block">
-              <div className="relative w-full h-80 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                <div className="text-center">
-                  <ShoppingBag className="w-32 h-32 mx-auto opacity-20 mb-4" />
-                  <p className="text-white/60">{t.premiumExperience}</p>
+              <div className="relative w-full h-80 rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=400&fit=crop"
+                  alt={t.premiumExperience}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <p className="text-white text-xl font-bold">{t.premiumExperience}</p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Marketing Slogans Section */}
+      <section className="py-20 px-4 bg-gradient-to-b from-slate-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              {language === "ar" ? "معنا دارنا" : language === "fr" ? "Avec darna" : "Our Mission"}
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              {language === "ar" ? "نحن نحول أحلامك إلى واقع" : language === "fr" ? "Nous transformons vos rêves en réalité" : "We transform your dreams into reality"}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            {/* Slogan 1 */}
+            <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+              <div className="relative h-64 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=500&h=300&fit=crop"
+                  alt="renovation"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+              </div>
+              <div className="p-6">
+                <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
+                  {language === "ar" ? "مع دارنا جديدك حبو ...و قديمك نقدرو" : language === "fr" ? "Avec darna, valorisez le nouveau et respectez l'ancien" : "With darna, love your new and appreciate your old"}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {language === "ar" ? "نحافظ على قيمة ممتلكاتك مع تحديثها بأحدث الأساليب" : language === "fr" ? "Préservez la valeur de votre propriété tout en la modernisant" : "Preserve your property value while modernizing it"}
+                </p>
+              </div>
+            </div>
+
+            {/* Slogan 2 */}
+            <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+              <div className="relative h-64 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&h=300&fit=crop"
+                  alt="selling"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+              </div>
+              <div className="p-6">
+                <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
+                  {language === "ar" ? "مع دارنا انت تبيع و غيرك يشري" : language === "fr" ? "Avec darna, vous vendez et d'autres achètent" : "With darna, you sell and others buy"}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {language === "ar" ? "منصة آمنة وموثوقة للبيع والشراء" : language === "fr" ? "Une plateforme sûre et fiable pour vendre et acheter" : "A safe and reliable platform for selling and buying"}
+                </p>
+              </div>
+            </div>
+
+            {/* Slogan 3 */}
+            <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+              <div className="relative h-64 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&h=300&fit=crop"
+                  alt="profit"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+              </div>
+              <div className="p-6">
+                <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
+                  {language === "ar" ? "مع دارنا جدد بيتك و اربح جيبك" : language === "fr" ? "Avec darna, rénovez votre maison et gagnez de l'argent" : "With darna, renovate your home and earn money"}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {language === "ar" ? "استثمر في بيتك وحقق أرباحاً حقيقية" : language === "fr" ? "Investissez dans votre maison et réalisez des profits réels" : "Invest in your home and achieve real profits"}
+                </p>
+              </div>
+            </div>
+
+            {/* Slogan 4 */}
+            <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
+              <div className="relative h-64 bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1556909029-c2ca60007c5f?w=500&h=300&fit=crop"
+                  alt="sustainability"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+              </div>
+              <div className="p-6">
+                <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
+                  {language === "ar" ? "مع دارنا: لا شيء يُرمى، كل شيء يُحول" : language === "fr" ? "Rien ne se jette, tout se transforme" : "Nothing is wasted, everything is transformed"}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {language === "ar" ? "استدامة وتحويل ذكي للموارد" : language === "fr" ? "Durabilité et transformation intelligente des ressources" : "Sustainability and smart resource transformation"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Slogans */}
+          <div className="bg-gradient-to-r from-primary to-secondary text-white rounded-2xl p-8 md:p-12">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-2xl md:text-3xl font-bold leading-tight">
+                  {language === "ar" ? "من دارك إلى دارنا" : language === "fr" ? "De votre maison à darna" : "From Your Home to darna"}
+                </h3>
+                <p className="text-lg text-white/90">
+                  {language === "ar" ? "انطلق نحو التغيير والازدهار" : language === "fr" ? "Commencez votre voyage vers le changement et la prospérité" : "Start your journey toward change and prosperity"}
+                </p>
+                <Link to="/shop">
+                  <Button className="bg-white text-primary hover:bg-white/90 font-semibold">
+                    {t.shopNow}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-2xl md:text-3xl font-bold leading-tight">
+                  {language === "ar" ? "سعر ذكي، اختيار واضح" : language === "fr" ? "Prix intelligent, choix évident" : "Smart Price, Perfect Choice"}
+                </h3>
+                <p className="text-lg text-white/90">
+                  {language === "ar" ? "جودة بأفضل الأسعار" : language === "fr" ? "Qualité aux meilleurs prix" : "Quality at the best prices"}
+                </p>
+                <Link to="/shop">
+                  <Button className="bg-white text-primary hover:bg-white/90 font-semibold">
+                    {t.shopNow}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Premium Slogans */}
+          <div className="mt-12 grid md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-xl border border-border p-8 text-center hover:shadow-lg transition-shadow">
+              <p className="text-xl font-bold text-primary mb-2">
+                {language === "ar" ? "جدد بدون جهد" : language === "fr" ? "Rénovez sans effort" : "Renovate Without Effort"}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {language === "ar" ? "عملية تجديد سهلة وسريعة" : language === "fr" ? "Un processus de rénovation facile et rapide" : "Easy and quick renovation process"}
+              </p>
+            </div>
+            <div className="bg-white rounded-xl border border-border p-8 text-center hover:shadow-lg transition-shadow">
+              <p className="text-xl font-bold text-primary mb-2">
+                {language === "ar" ? "اكسب الراحة" : language === "fr" ? "Gagnez le confort" : "Gain the Comfort"}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {language === "ar" ? "عيش في راحة واسترخاء" : language === "fr" ? "Vivez dans le confort et la détente" : "Live in comfort and relaxation"}
+              </p>
+            </div>
+            <div className="bg-white rounded-xl border border-border p-8 text-center hover:shadow-lg transition-shadow">
+              <p className="text-xl font-bold text-primary mb-2">
+                {language === "ar" ? "خيار ذكي" : language === "fr" ? "Choix évident" : "The Right Choice"}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {language === "ar" ? "الاختيار الأول للملايين" : language === "fr" ? "Le premier choix pour les millions" : "The first choice for millions"}
+              </p>
             </div>
           </div>
         </div>
@@ -249,8 +412,13 @@ export default function Index({ language }: IndexProps) {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
-              <div className="relative w-full h-80 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl flex items-center justify-center">
-                <Store className="w-32 h-32 text-primary/30" />
+              <div className="relative w-full h-80 rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&h=400&fit=crop"
+                  alt="Seller Dashboard"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               </div>
             </div>
             <div className="order-1 md:order-2 space-y-6">

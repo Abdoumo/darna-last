@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import ChatBubble from "./ChatBubble";
 
 type Language = "en" | "ar" | "fr";
 
@@ -21,7 +20,6 @@ export default function Layout({
       <Header language={language} onLanguageChange={onLanguageChange} />
       <main className="flex-1">{children}</main>
       <Footer language={language} />
-      <ChatBubble language={language} />
     </div>
   );
 }

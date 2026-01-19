@@ -1,0 +1,18 @@
+{
+  "buildCommand": "pnpm run build:client",
+  "outputDirectory": "dist/spa",
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "destination": "/api"
+    },
+    {
+      "src": "/(.*)",
+      "destination": "/index.html",
+      "status": 200
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

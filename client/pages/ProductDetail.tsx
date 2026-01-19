@@ -101,7 +101,7 @@ export default function ProductDetail({ language }: ProductDetailProps) {
         rating: 4.5,
         reviews: 320,
         seller: "TechMart",
-        image: "bg-gradient-to-br from-blue-400 to-blue-600",
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=500&fit=crop",
         category: "Electronics",
         description:
           "High-quality wireless headphones with noise cancellation, 30-hour battery life, and premium sound quality. Perfect for music lovers and professionals.",
@@ -114,7 +114,7 @@ export default function ProductDetail({ language }: ProductDetailProps) {
         rating: 4.8,
         reviews: 150,
         seller: "Fashion Plus",
-        image: "bg-gradient-to-br from-purple-400 to-pink-600",
+        image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=500&fit=crop",
         category: "Fashion",
         description:
           "Comfortable and durable cotton t-shirt made from 100% organic cotton. Available in multiple colors and sizes.",
@@ -127,7 +127,7 @@ export default function ProductDetail({ language }: ProductDetailProps) {
         rating: 4.7,
         reviews: 450,
         seller: "ElectroHub",
-        image: "bg-gradient-to-br from-green-400 to-teal-600",
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=500&fit=crop",
         category: "Electronics",
         description:
           "Advanced smartwatch with fitness tracking, heart rate monitor, and 7-day battery life. Compatible with iOS and Android.",
@@ -140,7 +140,7 @@ export default function ProductDetail({ language }: ProductDetailProps) {
         rating: 4.6,
         reviews: 280,
         seller: "CoffeeLovers",
-        image: "bg-gradient-to-br from-yellow-400 to-orange-600",
+        image: "https://images.unsplash.com/photo-1559056199-641a0ac8b3f7?w=600&h=500&fit=crop",
         category: "Food",
         description:
           "Premium organic coffee beans sourced from fair-trade farms. Freshly roasted and delivered to your door.",
@@ -153,7 +153,7 @@ export default function ProductDetail({ language }: ProductDetailProps) {
         rating: 4.9,
         reviews: 190,
         seller: "FitLife",
-        image: "bg-gradient-to-br from-red-400 to-red-600",
+        image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=600&h=500&fit=crop",
         category: "Sports",
         description:
           "Non-slip yoga mat with excellent cushioning. Eco-friendly and lightweight, perfect for home or studio practice.",
@@ -166,7 +166,7 @@ export default function ProductDetail({ language }: ProductDetailProps) {
         rating: 4.4,
         reviews: 220,
         seller: "HomeStyle",
-        image: "bg-gradient-to-br from-indigo-400 to-purple-600",
+        image: "https://images.unsplash.com/photo-1565636192335-14ecf9f05e39?w=600&h=500&fit=crop",
         category: "Home",
         description:
           "Modern LED desk lamp with adjustable brightness and color temperature. Energy-efficient and stylish design.",
@@ -179,7 +179,7 @@ export default function ProductDetail({ language }: ProductDetailProps) {
         rating: 4.7,
         reviews: 380,
         seller: "SportZone",
-        image: "bg-gradient-to-br from-cyan-400 to-blue-600",
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=500&fit=crop",
         category: "Fashion",
         description:
           "Comfortable and durable running shoes with advanced cushioning technology. Available in various sizes.",
@@ -192,7 +192,7 @@ export default function ProductDetail({ language }: ProductDetailProps) {
         rating: 4.8,
         reviews: 160,
         seller: "ChefPro",
-        image: "bg-gradient-to-br from-gray-400 to-gray-600",
+        image: "https://images.unsplash.com/photo-1593618998160-e34014e67546?w=600&h=500&fit=crop",
         category: "Home",
         description:
           "Professional-grade kitchen knife set with stainless steel blades. Includes storage case and sharpening stone.",
@@ -215,7 +215,7 @@ export default function ProductDetail({ language }: ProductDetailProps) {
               ...found,
               rating: 4.5,
               reviews: 0,
-              image: "bg-gradient-to-br from-cyan-400 to-blue-600",
+              image: found.image || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=500&fit=crop",
             };
           }
         } catch (error) {
@@ -259,12 +259,19 @@ export default function ProductDetail({ language }: ProductDetailProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {/* Product Image */}
           <div className="flex items-center justify-center">
-            <div
-              className={`${product.image} w-full h-96 md:h-full rounded-lg flex items-center justify-center relative`}
-            >
+            <div className="w-full h-96 md:h-full rounded-lg overflow-hidden relative bg-gray-100 flex items-center justify-center">
+              {product.image && product.image.startsWith("http") ? (
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className={`${product.image} w-full h-full`} />
+              )}
               <button
                 onClick={() => setIsFavorite(!isFavorite)}
-                className="absolute top-4 right-4 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all"
+                className="absolute top-4 right-4 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all z-10"
               >
                 <Heart
                   className={`w-6 h-6 ${

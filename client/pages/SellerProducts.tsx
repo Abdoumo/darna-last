@@ -342,18 +342,19 @@ export default function SellerProducts({ language }: SellerProductsProps) {
           id="name"
           placeholder={t.productNamePlaceholder}
           value={formData.name}
-          onChange={(e) =>
-            setFormData({ ...formData, name: e.target.value })
-          }
+          onChange={(e) => {
+            setFormData((prev) => ({ ...prev, name: e.target.value }));
+          }}
           required
+          autoFocus
         />
       </div>
 
       <div className="space-y-2">
         <Label>{t.category}</Label>
-        <Select value={formData.category} onValueChange={(value) =>
-          setFormData({ ...formData, category: value })
-        }>
+        <Select value={formData.category} onValueChange={(value) => {
+          setFormData((prev) => ({ ...prev, category: value }));
+        }}>
           <SelectTrigger>
             <SelectValue placeholder={t.selectCategory} />
           </SelectTrigger>
@@ -376,9 +377,9 @@ export default function SellerProducts({ language }: SellerProductsProps) {
             step="0.01"
             placeholder={t.pricePlaceholder}
             value={formData.price}
-            onChange={(e) =>
-              setFormData({ ...formData, price: e.target.value })
-            }
+            onChange={(e) => {
+              setFormData((prev) => ({ ...prev, price: e.target.value }));
+            }}
             required
           />
         </div>
@@ -389,9 +390,9 @@ export default function SellerProducts({ language }: SellerProductsProps) {
             type="number"
             placeholder={t.quantityPlaceholder}
             value={formData.quantity}
-            onChange={(e) =>
-              setFormData({ ...formData, quantity: e.target.value })
-            }
+            onChange={(e) => {
+              setFormData((prev) => ({ ...prev, quantity: e.target.value }));
+            }}
             required
           />
         </div>
@@ -403,9 +404,9 @@ export default function SellerProducts({ language }: SellerProductsProps) {
           id="description"
           placeholder={t.descriptionPlaceholder}
           value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
+          onChange={(e) => {
+            setFormData((prev) => ({ ...prev, description: e.target.value }));
+          }}
         />
       </div>
 
@@ -466,8 +467,8 @@ export default function SellerProducts({ language }: SellerProductsProps) {
             <h1 className="text-4xl font-bold text-foreground">{t.title}</h1>
             <p className="text-lg text-muted-foreground">{t.subtitle}</p>
           </div>
-          <Dialog open={isOpen} onOpenChange={(open) => {
-            if (!open) {
+          <Button
+            onClick={() => {
               setEditingProductId(null);
               setFormData({
                 name: "",
@@ -477,22 +478,12 @@ export default function SellerProducts({ language }: SellerProductsProps) {
                 category: "",
                 image: "",
               });
-            }
-            setIsOpen(open);
-          }}>
-            <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
-                <Plus className="w-4 h-4" />
-                {t.addProduct}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className={isRtl ? "rtl" : "ltr"} dir={isRtl ? "rtl" : "ltr"}>
-              <DialogHeader>
-                <DialogTitle>{editingProductId ? t.editProduct : t.addNewProduct}</DialogTitle>
-              </DialogHeader>
-              <ProductForm />
-            </DialogContent>
-          </Dialog>
+              setIsOpen(true);
+            }}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+            <Plus className="w-4 h-4" />
+            {t.addProduct}
+          </Button>
         </div>
 
         {/* Products List or Empty State */}
@@ -501,8 +492,8 @@ export default function SellerProducts({ language }: SellerProductsProps) {
             <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
             <h3 className="text-2xl font-bold text-foreground mb-2">{t.noProducts}</h3>
             <p className="text-muted-foreground mb-6">{t.noProductsDesc}</p>
-            <Dialog open={isOpen} onOpenChange={(open) => {
-              if (!open) {
+            <Button
+              onClick={() => {
                 setEditingProductId(null);
                 setFormData({
                   name: "",
@@ -512,22 +503,12 @@ export default function SellerProducts({ language }: SellerProductsProps) {
                   category: "",
                   image: "",
                 });
-              }
-              setIsOpen(open);
-            }}>
-              <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
-                  <Plus className="w-4 h-4" />
-                  {t.addProduct}
-                </Button>
-              </DialogTrigger>
-              <DialogContent className={isRtl ? "rtl" : "ltr"} dir={isRtl ? "rtl" : "ltr"}>
-                <DialogHeader>
-                  <DialogTitle>{editingProductId ? t.editProduct : t.addNewProduct}</DialogTitle>
-                </DialogHeader>
-                <ProductForm />
-              </DialogContent>
-            </Dialog>
+                setIsOpen(true);
+              }}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+              <Plus className="w-4 h-4" />
+              {t.addProduct}
+            </Button>
           </div>
         ) : (
           <div className="grid gap-6">
@@ -603,6 +584,29 @@ export default function SellerProducts({ language }: SellerProductsProps) {
             ))}
           </div>
         )}
+
+        {/* Unified Dialog for Add/Edit */}
+        <Dialog open={isOpen} onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) {
+            setEditingProductId(null);
+            setFormData({
+              name: "",
+              price: "",
+              quantity: "",
+              description: "",
+              category: "",
+              image: "",
+            });
+          }
+        }}>
+          <DialogContent className={isRtl ? "rtl" : "ltr"} dir={isRtl ? "rtl" : "ltr"}>
+            <DialogHeader>
+              <DialogTitle>{editingProductId ? t.editProduct : t.addNewProduct}</DialogTitle>
+            </DialogHeader>
+            <ProductForm />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
