@@ -204,7 +204,7 @@ export default function Index({ language }: IndexProps) {
             <div className="hidden md:block">
               <div className="relative w-full h-80 rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=400&fit=crop"
+                  src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=400&fit=crop"
                   alt={t.premiumExperience}
                   className="w-full h-full object-cover"
                 />
