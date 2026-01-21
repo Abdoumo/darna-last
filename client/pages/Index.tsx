@@ -204,9 +204,10 @@ export default function Index({ language }: IndexProps) {
             <div className="hidden md:block">
               <div className="relative w-full h-80 rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=400&fit=crop"
+                  src="assets/phone-darna.jpeg"
                   alt={t.premiumExperience}
                   className="w-full h-full object-cover"
+                  style={{imageFit:'cover'}}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">
