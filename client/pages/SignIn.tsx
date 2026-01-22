@@ -35,6 +35,7 @@ export default function SignIn({ language }: SignInProps) {
       createOne: "Create one",
       buyer: "I'm a Buyer",
       seller: "I'm a Seller",
+      admin: "I'm an Admin",
       selectRole: "Select your role",
       emailPlaceholder: "Enter your email",
       passwordPlaceholder: "Enter your password",
@@ -53,6 +54,7 @@ export default function SignIn({ language }: SignInProps) {
       createOne: "أنشئ واحدا",
       buyer: "أنا مشتري",
       seller: "أنا بائع",
+      admin: "أنا مسؤول",
       selectRole: "اختر دورك",
       emailPlaceholder: "أدخل بريدك الإلكتروني",
       passwordPlaceholder: "أدخل كلمة المرور",
@@ -71,6 +73,7 @@ export default function SignIn({ language }: SignInProps) {
       createOne: "En créer un",
       buyer: "Je suis acheteur",
       seller: "Je suis vendeur",
+      admin: "Je suis administrateur",
       selectRole: "Sélectionnez votre rôle",
       emailPlaceholder: "Entrez votre e-mail",
       passwordPlaceholder: "Entrez votre mot de passe",
@@ -95,8 +98,12 @@ export default function SignIn({ language }: SignInProps) {
       }
 
       await new Promise((resolve) => setTimeout(resolve, 800));
-      login(email, password, role as "buyer" | "seller");
-      navigate(`/dashboard/${role}`);
+      login(email, password, role as "buyer" | "seller" | "admin");
+      if (role === "admin") {
+        navigate("/admin/products");
+      } else {
+        navigate(`/dashboard/${role}`);
+      }
     } catch (err) {
       setError(t.error);
       setLoading(false);
@@ -115,9 +122,10 @@ export default function SignIn({ language }: SignInProps) {
 
           {/* Tabs */}
           <Tabs defaultValue="buyer" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="buyer">{t.buyer}</TabsTrigger>
               <TabsTrigger value="seller">{t.seller}</TabsTrigger>
+              <TabsTrigger value="admin">{t.admin}</TabsTrigger>
             </TabsList>
 
             {/* Buyer Tab */}
@@ -219,6 +227,69 @@ export default function SignIn({ language }: SignInProps) {
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="seller-password"
+                      type="password"
+                      placeholder={t.passwordPlaceholder}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
+                  disabled={loading}
+                >
+                  {loading ? t.signInSuccess : t.signin}
+                </Button>
+              </form>
+            </TabsContent>
+
+            {/* Admin Tab */}
+            <TabsContent value="admin" className="space-y-4 mt-6">
+              <form
+                onSubmit={(e) => handleSubmit(e, "admin")}
+                className="space-y-4"
+              >
+                <div className="space-y-2">
+                  <Label htmlFor="admin-email">{t.email}</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input
+                      id="admin-email"
+                      type="email"
+                      placeholder={t.emailPlaceholder}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="admin-password">{t.password}</Label>
+                    <Link
+                      to="/forgot-password"
+                      className="text-sm text-primary hover:underline"
+                    >
+                      {t.forgotPassword}
+                    </Link>
+                  </div>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input
+                      id="admin-password"
                       type="password"
                       placeholder={t.passwordPlaceholder}
                       value={password}

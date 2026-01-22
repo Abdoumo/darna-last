@@ -3,15 +3,15 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 export interface User {
   id: string;
   email: string;
-  role: "buyer" | "seller";
+  role: "buyer" | "seller" | "admin";
   name?: string;
   createdAt: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string, role: "buyer" | "seller") => void;
-  signup: (email: string, password: string, name: string, role: "buyer" | "seller") => void;
+  login: (email: string, password: string, role: "buyer" | "seller" | "admin") => void;
+  signup: (email: string, password: string, name: string, role: "buyer" | "seller" | "admin") => void;
   logout: () => void;
   isLoading: boolean;
 }

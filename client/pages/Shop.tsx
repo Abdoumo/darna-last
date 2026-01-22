@@ -17,9 +17,10 @@ interface ShopProps {
   language: Language;
 }
 
-const mockProducts = [
+// Fallback mock products if API is unavailable
+const fallbackProducts = [
   {
-    id: 1,
+    id: "fallback-1",
     name: "Modern Sofa",
     price: 129.99,
     rating: 4.5,
@@ -29,7 +30,7 @@ const mockProducts = [
     category: "Home",
   },
   {
-    id: 2,
+    id: "fallback-2",
     name: "Wooden Dining Table",
     price: 299.99,
     rating: 4.8,
@@ -39,63 +40,13 @@ const mockProducts = [
     category: "Home",
   },
   {
-    id: 3,
+    id: "fallback-3",
     name: "Office Chair Pro",
     price: 199.99,
     rating: 4.7,
     reviews: 450,
     seller: "OfficeHub",
     image: "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=400&h=300&fit=crop",
-    category: "Home",
-  },
-  {
-    id: 4,
-    name: "Glass Coffee Table",
-    price: 89.99,
-    rating: 4.6,
-    reviews: 280,
-    seller: "ModernHome",
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
-    category: "Home",
-  },
-  {
-    id: 5,
-    name: "Bookshelf Premium",
-    price: 149.99,
-    rating: 4.9,
-    reviews: 190,
-    seller: "StorageStudio",
-    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&h=300&fit=crop",
-    category: "Home",
-  },
-  {
-    id: 6,
-    name: "Floor Lamp Elegant",
-    price: 79.99,
-    rating: 4.4,
-    reviews: 220,
-    seller: "LightDesign",
-    image: "https://images.unsplash.com/photo-1565636192335-14ecf9f05e39?w=400&h=300&fit=crop",
-    category: "Home",
-  },
-  {
-    id: 7,
-    name: "Wall Mirror Large",
-    price: 59.99,
-    rating: 4.7,
-    reviews: 380,
-    seller: "DecorHub",
-    image: "https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=400&h=300&fit=crop",
-    category: "Home",
-  },
-  {
-    id: 8,
-    name: "Decorative Vase Set",
-    price: 69.99,
-    rating: 4.8,
-    reviews: 160,
-    seller: "ArtDecor",
-    image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400&h=300&fit=crop",
     category: "Home",
   },
 ];
@@ -210,39 +161,59 @@ export default function Shop({ language }: ShopProps) {
     );
   };
 
-  // Function to load products
-  const loadProducts = () => {
-    const mockProductsWithDefaults = mockProducts.map((p) => ({
-      ...p,
-      reviews: p.reviews || 0,
-      rating: p.rating || 0,
-    }));
-
-    const sellerProducts: Product[] = [];
-    const allStoredProducts = localStorage.getItem("darna-all-products");
-    if (allStoredProducts) {
-      try {
-        const parsed = JSON.parse(allStoredProducts);
-        sellerProducts.push(
-          ...parsed.map((p: any) => ({
-            id: p.id,
-            name: p.name,
-            price: p.price,
-            rating: 4.5,
-            reviews: 0,
-            seller: p.sellerEmail || "Seller",
-            category: p.category,
-            description: p.description,
-            quantity: p.quantity,
-            image: p.image || `https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop`,
-          }))
-        );
-      } catch (error) {
-        console.error("Failed to load seller products:", error);
+  // Function to load products from API
+  const loadProducts = async () => {
+    try {
+      const response = await fetch("/api/products");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    }
+      const apiProducts = await response.json();
 
-    setAllProducts([...mockProductsWithDefaults, ...sellerProducts]);
+      // Convert API products to shop display format
+      const formattedProducts: Product[] = apiProducts.map((p: any) => ({
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        rating: p.rating || 4.5,
+        reviews: p.reviews || 0,
+        seller: p.seller || "Unknown Seller",
+        category: p.category,
+        image: p.image || "https://via.placeholder.com/400x300",
+        description: p.description,
+      }));
+
+      // Also check for seller products in localStorage (for backwards compatibility)
+      const sellerProducts: Product[] = [];
+      const allStoredProducts = localStorage.getItem("darna-all-products");
+      if (allStoredProducts) {
+        try {
+          const parsed = JSON.parse(allStoredProducts);
+          sellerProducts.push(
+            ...parsed.map((p: any) => ({
+              id: p.id,
+              name: p.name,
+              price: p.price,
+              rating: 4.5,
+              reviews: 0,
+              seller: p.sellerEmail || "Seller",
+              category: p.category,
+              description: p.description,
+              quantity: p.quantity,
+              image: p.image || `https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop`,
+            }))
+          );
+        } catch (error) {
+          console.error("Failed to load seller products:", error);
+        }
+      }
+
+      setAllProducts([...formattedProducts, ...sellerProducts]);
+    } catch (error) {
+      console.error("Failed to load products from API:", error);
+      // Fallback to local products if API fails
+      setAllProducts(fallbackProducts);
+    }
   };
 
   // Load products on mount and when page gains focus

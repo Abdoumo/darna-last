@@ -92,141 +92,56 @@ export default function ProductDetail({ language }: ProductDetailProps) {
   const isRtl = language === "ar";
 
   useEffect(() => {
-    // Load product from mock data or localStorage
-    const mockProducts = [
-      {
-        id: 1,
-        name: "Modern Sofa",
-        price: 129.99,
-        rating: 4.5,
-        reviews: 320,
-        seller: "FurniturePro",
-        image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=500&fit=crop",
-        category: "Home",
-        description:
-          "Comfortable modern sofa with premium upholstery and sturdy frame. Perfect for living rooms and lounges. Available in multiple colors and sizes.",
-        quantity: 50,
-      },
-      {
-        id: 2,
-        name: "Wooden Dining Table",
-        price: 299.99,
-        rating: 4.8,
-        reviews: 150,
-        seller: "WoodWorks",
-        image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&h=500&fit=crop",
-        category: "Home",
-        description:
-          "Elegant wooden dining table crafted from fine hardwood. Seats up to 8 people. Features a polished finish and clean contemporary design.",
-        quantity: 200,
-      },
-      {
-        id: 3,
-        name: "Office Chair Pro",
-        price: 199.99,
-        rating: 4.7,
-        reviews: 450,
-        seller: "OfficeHub",
-        image: "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&h=500&fit=crop",
-        category: "Home",
-        description:
-          "Ergonomic office chair with adjustable height and lumbar support. Perfect for long work sessions. Premium mesh back and cushioned seat.",
-        quantity: 30,
-      },
-      {
-        id: 4,
-        name: "Glass Coffee Table",
-        price: 89.99,
-        rating: 4.6,
-        reviews: 280,
-        seller: "ModernHome",
-        image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=500&fit=crop",
-        category: "Home",
-        description:
-          "Minimalist glass coffee table with metal frame. Adds elegance to any living room. Easy to clean and maintains a modern aesthetic.",
-        quantity: 100,
-      },
-      {
-        id: 5,
-        name: "Bookshelf Premium",
-        price: 149.99,
-        rating: 4.9,
-        reviews: 190,
-        seller: "StorageStudio",
-        image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&h=500&fit=crop",
-        category: "Home",
-        description:
-          "Five-tier wooden bookshelf with ample storage. Sturdy construction supports heavy books and decorative items. Perfect for home libraries.",
-        quantity: 75,
-      },
-      {
-        id: 6,
-        name: "Floor Lamp Elegant",
-        price: 79.99,
-        rating: 4.4,
-        reviews: 220,
-        seller: "LightDesign",
-        image: "https://images.unsplash.com/photo-1565636192335-14ecf9f05e39?w=600&h=500&fit=crop",
-        category: "Home",
-        description:
-          "Contemporary floor lamp with adjustable brightness. Energy-efficient LED bulb. Creates warm ambiance in any room. Easy to assemble.",
-        quantity: 45,
-      },
-      {
-        id: 7,
-        name: "Wall Mirror Large",
-        price: 59.99,
-        rating: 4.7,
-        reviews: 380,
-        seller: "DecorHub",
-        image: "https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=600&h=500&fit=crop",
-        category: "Home",
-        description:
-          "Large decorative wall mirror with elegant frame. Reflects light to brighten spaces. Perfect for bedrooms, hallways, and bathrooms.",
-        quantity: 120,
-      },
-      {
-        id: 8,
-        name: "Decorative Vase Set",
-        price: 69.99,
-        rating: 4.8,
-        reviews: 160,
-        seller: "ArtDecor",
-        image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&h=500&fit=crop",
-        category: "Home",
-        description:
-          "Set of three decorative vases in complementary designs. Perfect for table arrangements and floral displays. Handcrafted with attention to detail.",
-        quantity: 35,
-      },
-    ];
+    // Load product from API
+    const loadProduct = async () => {
+      try {
+        const response = await fetch(`/api/products/${id}`);
+        if (!response.ok) {
+          throw new Error("Product not found");
+        }
+        const apiProduct = await response.json();
 
-    // Check mock products first
-    let found = mockProducts.find((p) => p.id.toString() === id);
+        // Format product for display
+        const formattedProduct: Product = {
+          id: apiProduct.id,
+          name: apiProduct.name,
+          price: apiProduct.price,
+          rating: apiProduct.rating || 4.5,
+          reviews: apiProduct.reviews || 0,
+          seller: apiProduct.seller || "Unknown Seller",
+          category: apiProduct.category,
+          image: apiProduct.image || "https://via.placeholder.com/600x500",
+          description: apiProduct.description,
+          quantity: apiProduct.stock || 10,
+        };
 
-    // If not found, check localStorage for seller products
-    if (!found) {
-      const allStoredProducts = localStorage.getItem("darna-all-products");
-      if (allStoredProducts) {
-        try {
-          const parsed = JSON.parse(allStoredProducts);
-          found = parsed.find((p: any) => p.id === id);
-          if (found) {
-            found = {
-              ...found,
-              rating: 4.5,
-              reviews: 0,
-              image: found.image || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=500&fit=crop",
-            };
+        setProduct(formattedProduct);
+      } catch (error) {
+        console.error("Failed to load product:", error);
+
+        // Fallback: check localStorage for seller products
+        const allStoredProducts = localStorage.getItem("darna-all-products");
+        if (allStoredProducts) {
+          try {
+            const parsed = JSON.parse(allStoredProducts);
+            const found = parsed.find((p: any) => p.id === id);
+            if (found) {
+              const formattedProduct: Product = {
+                ...found,
+                rating: 4.5,
+                reviews: 0,
+                image: found.image || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=500&fit=crop",
+              };
+              setProduct(formattedProduct);
+            }
+          } catch (parseError) {
+            console.error("Failed to load seller products:", parseError);
           }
-        } catch (error) {
-          console.error("Failed to load seller products:", error);
         }
       }
-    }
+    };
 
-    if (found) {
-      setProduct(found);
-    }
+    loadProduct();
   }, [id]);
 
   if (!product) {

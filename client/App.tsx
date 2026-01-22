@@ -25,6 +25,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import Chatbot from "./pages/Chatbot";
+import AdminProducts from "./pages/AdminProducts";
 import { AuthProvider } from "./lib/auth-context";
 import { CartProvider, OrderProvider } from "./lib/cart-context";
 
@@ -175,6 +176,12 @@ const AppContent = () => {
             <Dashboard language={language} />
           </Layout>
         }
+      />
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin/products"
+        element={<AdminProducts />}
       />
 
       {/* Seller Routes */}
