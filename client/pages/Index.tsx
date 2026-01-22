@@ -193,8 +193,7 @@ export default function Index({ language }: IndexProps) {
                 <Link to="/sellers">
                   <Button
                     size="lg"
-                    variant="outline"
-                    className="border-white text-white hover:bg-white/10 w-full sm:w-auto font-semibold"
+                    className="bg-primary text-white hover:bg-primary/90 w-full sm:w-auto font-semibold border-2 border-white"
                   >
                     {t.becomeSeller}
                   </Button>
@@ -220,7 +219,7 @@ export default function Index({ language }: IndexProps) {
       </section>
 
       {/* Marketing Slogans Section */}
-      <section className="py-20 px-4 bg-gradient-to-b from-slate-50 to-white">
+      <section className="py-20 px-4 bg-gradient-to-b from-green-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
@@ -234,7 +233,7 @@ export default function Index({ language }: IndexProps) {
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             {/* Slogan 1 */}
             <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-              <div className="relative h-64 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center overflow-hidden">
+              <div className="relative h-64 bg-gradient-green flex items-center justify-center overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=500&h=300&fit=crop"
                   alt="renovation"
@@ -254,7 +253,7 @@ export default function Index({ language }: IndexProps) {
 
             {/* Slogan 2 */}
             <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-              <div className="relative h-64 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center overflow-hidden">
+              <div className="relative h-64 bg-gradient-green-subtle flex items-center justify-center overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&h=300&fit=crop"
                   alt="selling"
@@ -274,7 +273,7 @@ export default function Index({ language }: IndexProps) {
 
             {/* Slogan 3 */}
             <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-              <div className="relative h-64 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center overflow-hidden">
+              <div className="relative h-64 bg-gradient-green flex items-center justify-center overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&h=300&fit=crop"
                   alt="profit"
@@ -294,7 +293,7 @@ export default function Index({ language }: IndexProps) {
 
             {/* Slogan 4 */}
             <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-              <div className="relative h-64 bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center overflow-hidden">
+              <div className="relative h-64 bg-gradient-green-light flex items-center justify-center overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1556909029-c2ca60007c5f?w=500&h=300&fit=crop"
                   alt="sustainability"
@@ -409,7 +408,7 @@ export default function Index({ language }: IndexProps) {
       </section>
 
       {/* For Sellers Section */}
-      <section className="py-20 px-4 bg-slate-50">
+      <section className="py-20 px-4 bg-green-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
@@ -461,7 +460,7 @@ export default function Index({ language }: IndexProps) {
             ].map((category, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 border border-border hover:border-primary/50 cursor-pointer transition-all hover:shadow-md"
+                className="p-6 rounded-lg bg-gradient-to-br from-green-50 to-green-100 border border-primary/20 hover:border-primary/50 cursor-pointer transition-all hover:shadow-md"
               >
                 <div className="w-12 h-12 bg-primary/10 rounded-lg mb-4 flex items-center justify-center">
                   <ShoppingBag className="w-6 h-6 text-primary" />
