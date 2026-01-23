@@ -2,7 +2,7 @@ import serverless from "serverless-http";
 import { createServer } from "../server";
 
 export const config = {
-  runtime: "nodejs20.x",
+  runtime: "nodejs",
 };
 
 export default serverless(createServer());
