@@ -1,20 +1,93 @@
 import { Link } from "react-router-dom";
-import {
-  Heart,
-  Truck,
-  Wrench,
-  Key,
-  Recycle,
-  DollarSign,
-  MapPin,
-  Image as ImageIcon,
-  Facebook,
-} from "lucide-react";
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Facebook } from "lucide-react";
 
 type Language = "en" | "ar" | "fr";
 
 interface FooterProps {
   language: Language;
+}
+
+// Sample images mapping for categories
+const categoryImages: Record<string, string[]> = {
+  "غرف نوم": [
+    "/assets/WhatsApp Image 2026-01-18 at 8.14.05 PM.jpeg",
+    "/assets/WhatsApp Image 2026-01-18 at 8.14.06 PM.jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.37.20 PM.jpeg",
+  ],
+  "غرف أطفال": [
+    "/assets/WhatsApp Image 2026-01-19 at 1.37.20 PM (1).jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.37.20 PM (2).jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.37.20 PM (3).jpeg",
+  ],
+  "صالونات": [
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.41 PM.jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.42 PM.jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.42 PM (2).jpeg",
+  ],
+  "Salle à manger": [
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.42 PM (3).jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.42 PM (4).jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.42 PM (5).jpeg",
+  ],
+  "Tables de cuisine": [
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.43 PM.jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.43 PM (1).jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.43 PM (2).jpeg",
+  ],
+  "Déco": [
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.44 PM.jpeg",
+    "/assets/WhatsApp Image 2026-01-19 at 1.49.44 PM (1).jpeg",
+    "/assets/deco-hero.jpeg",
+  ],
+};
+
+// Image Carousel Component
+function ImageCarousel({ category }: { category: string }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const images = categoryImages[category] || ["/placeholder.svg"];
+
+  const nextImage = () => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  return (
+    <div className="relative bg-slate-900 rounded-lg overflow-hidden mb-4 h-40">
+      <img
+        src={images[currentIndex]}
+        alt={category}
+        className="w-full h-full object-cover"
+        onError={(e) => {
+          e.currentTarget.src = "/placeholder.svg";
+        }}
+      />
+      {images.length > 1 && (
+        <>
+          <button
+            onClick={prevImage}
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white p-1 rounded-full transition-colors"
+            aria-label="Previous image"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            onClick={nextImage}
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white p-1 rounded-full transition-colors"
+            aria-label="Next image"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </>
+      )}
+      <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
+        {currentIndex + 1} / {images.length}
+      </div>
+    </div>
+  );
 }
 
 export default function Footer({ language }: FooterProps) {
@@ -266,40 +339,6 @@ export default function Footer({ language }: FooterProps) {
       ourMission: "Notre Mission",
       copyright: "© 2024 Darna. Tous droits réservés.",
       followUs: "Suivez-nous",
-      about: "About",
-      contact: "Contact",
-      privacy: "Privacy Policy",
-      terms: "Terms of Service",
-      copyright: "© 2026 darna. All rights reserved.",
-      company: "Company",
-      support: "Support",
-      legal: "Legal",
-      helpCenter: "Help Center",
-      chatSupport: "Chat Support",
-    },
-    ar: {
-      about: "حول",
-      contact: "اتصل بنا",
-      privacy: "سياسة الخصوصية",
-      terms: "شروط الخدمة",
-      copyright: "© 2026 darna. جميع الحقوق محفوظة.",
-      company: "الشركة",
-      support: "الدعم",
-      legal: "القانوني",
-      helpCenter: "مركز المساعدة",
-      chatSupport: "دعم الدردشة",
-    },
-    fr: {
-      about: "À propos",
-      contact: "Contact",
-      privacy: "Politique de confidentialité",
-      terms: "Conditions d'utilisation",
-      copyright: "© 2026 darna. Tous droits réservés.",
-      company: "Entreprise",
-      support: "Support",
-      legal: "Légal",
-      helpCenter: "Centre d'aide",
-      chatSupport: "Support par chat",
     },
   };
 
@@ -330,13 +369,13 @@ export default function Footer({ language }: FooterProps) {
               <h3 className="text-xl font-bold mb-4">{card.title}</h3>
 
               {card.categories ? (
-                <div className="space-y-2">
+                <div className="space-y-4">
                   {card.categories.map((category, idx) => (
-                    <div
-                      key={idx}
-                      className="text-sm text-gray-300 hover:text-white transition-colors"
-                    >
-                      • {category}
+                    <div key={idx}>
+                      <ImageCarousel category={category} />
+                      <p className="text-sm font-semibold text-gray-200">
+                        {category}
+                      </p>
                     </div>
                   ))}
                 </div>
