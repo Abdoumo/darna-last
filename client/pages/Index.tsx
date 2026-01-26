@@ -18,7 +18,7 @@ interface IndexProps {
 export default function Index({ language }: IndexProps) {
   const translations = {
     en: {
-      hero: "Welcome to darna",
+      hero: "أيقونة التسعير الذكي",
       heroDesc:
         "The ultimate multivendor marketplace connecting buyers with trusted sellers worldwide",
       shopNow: "Shop Now",
@@ -116,7 +116,7 @@ export default function Index({ language }: IndexProps) {
       premiumExperience: "تجربة تسوق ممتازة",
     },
     fr: {
-      hero: "Bienvenue sur darna",
+      hero: "أيقونة التسعير الذكي",
       heroDesc:
         "La place de marché multifournisseur ultime reliant les acheteurs aux vendeurs de confiance du monde entier",
       shopNow: "Acheter maintenant",
@@ -203,7 +203,7 @@ export default function Index({ language }: IndexProps) {
             <div className="hidden md:block">
               <div className="relative w-full h-80 rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="assets/phone-darna.jpeg"
+                  src="assets/djks.jpeg"
                   alt={t.premiumExperience}
                   className="w-full h-full object-cover"
                   style={{imageFit:'cover'}}

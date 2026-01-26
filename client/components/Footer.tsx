@@ -1,4 +1,15 @@
 import { Link } from "react-router-dom";
+import {
+  Heart,
+  Truck,
+  Wrench,
+  Key,
+  Recycle,
+  DollarSign,
+  MapPin,
+  Image as ImageIcon,
+  Facebook,
+} from "lucide-react";
 
 type Language = "en" | "ar" | "fr";
 
@@ -7,103 +18,326 @@ interface FooterProps {
 }
 
 export default function Footer({ language }: FooterProps) {
-  const translations = {
+  const isRtl = language === "ar";
+
+  const missions = {
+    en: [
+      {
+        id: 1,
+        title: "Hero Section",
+        icon: "🏠",
+        taglines: [
+          "Darna – Refresh your home... and win your pocket",
+          "With Darna, your new is in love, and your old is valued",
+          "With Darna, you sell... and someone else buys",
+          "From your home to Darna",
+        ],
+      },
+      {
+        id: 2,
+        title: "Smart Pricing",
+        icon: "💶",
+        taglines: [
+          "Fair electronic evaluation, no discussion and no argument",
+          "Smart Price, Perfect Choice",
+        ],
+      },
+      {
+        id: 3,
+        title: "Logistics & Tracking",
+        icon: "🚚",
+        taglines: ["Your items are safe, track them wherever they are"],
+      },
+      {
+        id: 4,
+        title: "Maintenance & Repair",
+        icon: "🛠",
+        taglines: ["Renovate without effort, gain comfort"],
+      },
+      {
+        id: 5,
+        title: "Darna Brocante",
+        icon: "🗝",
+        taglines: [
+          "Zeal of old times in a talented application",
+          "Authenticity has an address, and rare pieces have a place",
+          "Rare pieces for unique spaces",
+        ],
+      },
+      {
+        id: 6,
+        title: "Charity & Donation",
+        icon: "❤️",
+        taglines: [
+          "Ongoing charity... in every expensive piece",
+          "Share the comfort, spread the love",
+        ],
+      },
+      {
+        id: 7,
+        title: "Sustainability & Recycling",
+        icon: "♻️",
+        taglines: [
+          "Smart recycling... for a clean world",
+          "Your furniture is renewed, and the earth's lifespan is extended",
+          "Re-think · Re-furnish · Re-love",
+          "Nothing is thrown away, everything is transformed with Darna",
+        ],
+      },
+      {
+        id: 8,
+        title: "Product Gallery",
+        icon: "🖼",
+        categories: [
+          "غرف نوم",
+          "غرف أطفال",
+          "صالونات",
+          "Salle à manger",
+          "Tables de cuisine",
+          "Déco",
+        ],
+      },
+    ],
+    ar: [
+      {
+        id: 1,
+        title: "الواجهة الرئيسية",
+        icon: "🏠",
+        taglines: [
+          "دارنا – جدد بيتك… و اربح جيبك",
+          "مع دارنا جديدك حبو، وقديمك نقدرو",
+          "مع دارنا إنت تبيع… وغيرك يشري",
+          "من دارك لدارنا",
+        ],
+      },
+      {
+        id: 2,
+        title: "التسعير الذكي",
+        icon: "💶",
+        taglines: [
+          "تقييم إلكتروني عادل، لا تناقش ولا تجادل",
+          "Smart Price, Perfect Choice",
+        ],
+      },
+      {
+        id: 3,
+        title: "اللوجيستيك والتتبع",
+        icon: "🚚",
+        taglines: ["متاعك في أمان، تبعو وين ما كان"],
+      },
+      {
+        id: 4,
+        title: "الصيانة والترميم",
+        icon: "🛠",
+        taglines: ["Renover sans effort, gagnez le confort"],
+      },
+      {
+        id: 5,
+        title: "دارنا بروكنت",
+        icon: "🗝",
+        taglines: [
+          "همة زمان في تطبيق فنان",
+          "للأصالة عنوان، وللقطع النادرة مكان",
+          "Rare pieces for unique spaces",
+        ],
+      },
+      {
+        id: 6,
+        title: "الأعمال الخيرية والتبرع",
+        icon: "❤️",
+        taglines: [
+          "صدقة جارية… في كل قطعة غالية",
+          "Share the comfort, spread the love",
+        ],
+      },
+      {
+        id: 7,
+        title: "الاستدامة وإعادة التدوير",
+        icon: "♻️",
+        taglines: [
+          "تدوير ذكي… لعالم نقي",
+          "أثاثك يتجدد، وعمر الأرض يتمدد",
+          "Re-think · Re-furnish · Re-love",
+          "Rien ne se jette, tout se transforme avec Darna",
+        ],
+      },
+      {
+        id: 8,
+        title: "عرض المنتجات",
+        icon: "🖼",
+        categories: [
+          "غرف نوم",
+          "غرف أطفال",
+          "صالونات",
+          "Salle à manger",
+          "Tables de cuisine",
+          "Déco",
+        ],
+      },
+    ],
+    fr: [
+      {
+        id: 1,
+        title: "Section Héroïque",
+        icon: "🏠",
+        taglines: [
+          "Darna – Rafraîchissez votre maison... et gagnez votre poche",
+          "Avec Darna, votre neuf est aimé, et votre ancien est valorisé",
+          "Avec Darna, vous vendez... et quelqu'un d'autre achète",
+          "De votre maison à Darna",
+        ],
+      },
+      {
+        id: 2,
+        title: "Tarification Intelligente",
+        icon: "💶",
+        taglines: [
+          "Prix intelligent, choix évident",
+          "Smart Price, Perfect Choice",
+        ],
+      },
+      {
+        id: 3,
+        title: "Logistique et Suivi",
+        icon: "🚚",
+        taglines: ["Suivez votre confort"],
+      },
+      {
+        id: 4,
+        title: "Maintenance et Rénovation",
+        icon: "🛠",
+        taglines: ["Renover sans effort, gagnez le confort"],
+      },
+      {
+        id: 5,
+        title: "Darna Brocante",
+        icon: "🗝",
+        taglines: [
+          "Darna brocante, chaque objet a une histoire",
+          "Rare pieces for unique spaces",
+        ],
+      },
+      {
+        id: 6,
+        title: "Charité et Donation",
+        icon: "❤️",
+        taglines: [
+          "Le partage commence par un geste simple",
+          "Share the comfort, spread the love",
+        ],
+      },
+      {
+        id: 7,
+        title: "Durabilité et Recyclage",
+        icon: "♻️",
+        taglines: [
+          "Re-think · Re-furnish · Re-love",
+          "Rien ne se jette, tout se transforme avec Darna",
+        ],
+      },
+      {
+        id: 8,
+        title: "Galerie de Produits",
+        icon: "🖼",
+        categories: [
+          "غرف نوم",
+          "غرف أطفال",
+          "صالونات",
+          "Salle à manger",
+          "Tables de cuisine",
+          "Déco",
+        ],
+      },
+    ],
+  };
+
+  const labels = {
     en: {
-      about: "About",
-      contact: "Contact",
-      privacy: "Privacy Policy",
-      terms: "Terms of Service",
-      copyright: "© 2024 darna. All rights reserved.",
-      company: "Company",
-      support: "Support",
-      legal: "Legal",
-      helpCenter: "Help Center",
-      chatSupport: "Chat Support",
+      ourMission: "Our Mission",
+      copyright: "© 2024 Darna. All rights reserved.",
+      followUs: "Follow Us",
     },
     ar: {
-      about: "حول",
-      contact: "اتصل بنا",
-      privacy: "سياسة الخصوصية",
-      terms: "شروط الخدمة",
-      copyright: "© 2024 darna. جميع الحقوق محفوظة.",
-      company: "الشركة",
-      support: "الدعم",
-      legal: "القانوني",
-      helpCenter: "مركز المساعدة",
-      chatSupport: "دعم الدردشة",
+      ourMission: "مهمتنا",
+      copyright: "© 2024 دارنا. جميع الحقوق محفوظة.",
+      followUs: "تابعنا",
     },
     fr: {
-      about: "À propos",
-      contact: "Contact",
-      privacy: "Politique de confidentialité",
-      terms: "Conditions d'utilisation",
-      copyright: "© 2024 darna. Tous droits réservés.",
-      company: "Entreprise",
-      support: "Support",
-      legal: "Légal",
-      helpCenter: "Centre d'aide",
-      chatSupport: "Support par chat",
+      ourMission: "Notre Mission",
+      copyright: "© 2024 Darna. Tous droits réservés.",
+      followUs: "Suivez-nous",
     },
   };
 
-  const t = translations[language];
-  const isRtl = language === "ar";
+  const missionCards = missions[language];
+  const footerLabels = labels[language];
 
   return (
     <footer
-      className={`bg-slate-900 text-white mt-16 ${isRtl ? "rtl" : "ltr"}`}
+      className={`bg-gradient-to-b from-slate-900 to-slate-950 text-white mt-16 ${
+        isRtl ? "rtl" : "ltr"
+      }`}
       dir={isRtl ? "rtl" : "ltr"}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          <div>
-            <h3 className="font-bold text-lg mb-4">{t.company}</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-gray-300 hover:text-white">
-                  {t.about}
-                </Link>
-              </li>
-              <li>
-                <Link to="/" className="text-gray-300 hover:text-white">
-                  {t.contact}
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg mb-4">{t.support}</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-gray-300 hover:text-white">
-                  {t.helpCenter}
-                </Link>
-              </li>
-              <li>
-                <Link to="/" className="text-gray-300 hover:text-white">
-                  {t.chatSupport}
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg mb-4">{t.legal}</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-gray-300 hover:text-white">
-                  {t.privacy}
-                </Link>
-              </li>
-              <li>
-                <Link to="/" className="text-gray-300 hover:text-white">
-                  {t.terms}
-                </Link>
-              </li>
-            </ul>
+      {/* Mission Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 className="text-3xl font-bold text-center mb-12">
+          {footerLabels.ourMission}
+        </h2>
+
+        {/* 8 Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {missionCards.map((card) => (
+            <div
+              key={card.id}
+              className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-lg p-6 hover:from-slate-700 hover:to-slate-600 transition-all duration-300 border border-slate-600 hover:border-slate-500"
+            >
+              <div className="text-4xl mb-4">{card.icon}</div>
+              <h3 className="text-xl font-bold mb-4">{card.title}</h3>
+
+              {card.categories ? (
+                <div className="space-y-2">
+                  {card.categories.map((category, idx) => (
+                    <div
+                      key={idx}
+                      className="text-sm text-gray-300 hover:text-white transition-colors"
+                    >
+                      • {category}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <ul className="space-y-3">
+                  {card.taglines?.map((tagline, idx) => (
+                    <li key={idx} className="text-sm text-gray-300 leading-relaxed">
+                      "{tagline}"
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Facebook Link Section */}
+        <div className="border-t border-slate-700 pt-12 mb-8">
+          <div className="flex flex-col items-center justify-center gap-6">
+            <h3 className="text-lg font-semibold">{footerLabels.followUs}</h3>
+            <a
+              href="https://www.facebook.com/share/1DQeJ3cHGF/?mibextid=LQQJ4d"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              <Facebook size={24} />
+              Facebook Page
+            </a>
           </div>
         </div>
-        <div className="border-t border-gray-700 pt-8">
-          <p className="text-gray-300 text-center">{t.copyright}</p>
+
+        {/* Copyright */}
+        <div className="border-t border-slate-700 pt-8">
+          <p className="text-gray-400 text-center">{footerLabels.copyright}</p>
         </div>
       </div>
     </footer>
