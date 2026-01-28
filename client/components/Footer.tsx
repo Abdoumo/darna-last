@@ -8,7 +8,7 @@ interface FooterProps {
   language: Language;
 }
 
-// Sample images mapping for categories
+// Sample images mapping for categories (Product Gallery)
 const categoryImages: Record<string, string[]> = {
   "غرف نوم": [
     "/assets/WhatsApp Image 2026-01-18 at 8.14.05 PM.jpeg",
@@ -42,10 +42,59 @@ const categoryImages: Record<string, string[]> = {
   ],
 };
 
+// Mission card images from the internet
+const missionCardImages: Record<number, string[]> = {
+  1: [
+    "https://images.pexels.com/photos/15124841/pexels-photo-15124841.jpeg",
+    "https://images.pexels.com/photos/20285350/pexels-photo-20285350.jpeg",
+    "https://images.pexels.com/photos/6438756/pexels-photo-6438756.jpeg",
+  ],
+  2: [
+    "https://images.pexels.com/photos/7986988/pexels-photo-7986988.jpeg",
+    "https://images.pexels.com/photos/5872174/pexels-photo-5872174.jpeg",
+    "https://images.pexels.com/photos/5486112/pexels-photo-5486112.jpeg",
+  ],
+  3: [
+    "https://images.pexels.com/photos/15379824/pexels-photo-15379824.jpeg",
+    "https://images.pexels.com/photos/6169132/pexels-photo-6169132.jpeg",
+    "https://images.pexels.com/photos/4440788/pexels-photo-4440788.jpeg",
+  ],
+  4: [
+    "https://images.pexels.com/photos/5095283/pexels-photo-5095283.jpeg",
+    "https://images.pexels.com/photos/18947372/pexels-photo-18947372.jpeg",
+    "https://images.pexels.com/photos/12407407/pexels-photo-12407407.jpeg",
+  ],
+  5: [
+    "https://images.pexels.com/photos/32786109/pexels-photo-32786109.jpeg",
+    "https://images.pexels.com/photos/13684407/pexels-photo-13684407.jpeg",
+    "https://images.pexels.com/photos/9818821/pexels-photo-9818821.jpeg",
+  ],
+  6: [
+    "https://images.pexels.com/photos/6646875/pexels-photo-6646875.jpeg",
+    "https://images.pexels.com/photos/6646926/pexels-photo-6646926.jpeg",
+    "https://images.pexels.com/photos/7156160/pexels-photo-7156160.jpeg",
+  ],
+  7: [
+    "https://images.pexels.com/photos/3735195/pexels-photo-3735195.jpeg",
+    "https://images.pexels.com/photos/5099276/pexels-photo-5099276.jpeg",
+    "https://images.pexels.com/photos/7771964/pexels-photo-7771964.jpeg",
+  ],
+  8: categoryImages["غرف أطفال"],
+  9: categoryImages["صالونات"],
+  10: categoryImages["Salle à manger"],
+  11: categoryImages["Tables de cuisine"],
+  12: categoryImages["Déco"],
+};
+
 // Image Carousel Component
-function ImageCarousel({ category }: { category: string }) {
+interface ImageCarouselProps {
+  category?: string;
+  images?: string[];
+}
+
+function ImageCarousel({ category, images: propImages }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = categoryImages[category] || ["/placeholder.svg"];
+  const images = propImages || (category ? categoryImages[category] : []) || ["/placeholder.svg"];
 
   const nextImage = () => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -55,11 +104,13 @@ function ImageCarousel({ category }: { category: string }) {
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
+  const altText = category || "Gallery image";
+
   return (
     <div className="relative bg-slate-900 rounded-lg overflow-hidden mb-4 h-40">
       <img
         src={images[currentIndex]}
-        alt={category}
+        alt={altText}
         className="w-full h-full object-cover"
         onError={(e) => {
           e.currentTarget.src = "/placeholder.svg";
@@ -99,6 +150,7 @@ export default function Footer({ language }: FooterProps) {
         id: 1,
         title: "Hero Section",
         icon: "🏠",
+        images: missionCardImages[1],
         taglines: [
           "Darna – Refresh your home... and win your pocket",
           "With Darna, your new is in love, and your old is valued",
@@ -110,6 +162,7 @@ export default function Footer({ language }: FooterProps) {
         id: 2,
         title: "Smart Pricing",
         icon: "💶",
+        images: missionCardImages[2],
         taglines: [
           "Fair electronic evaluation, no discussion and no argument",
           "Smart Price, Perfect Choice",
@@ -119,18 +172,21 @@ export default function Footer({ language }: FooterProps) {
         id: 3,
         title: "Logistics & Tracking",
         icon: "🚚",
+        images: missionCardImages[3],
         taglines: ["Your items are safe, track them wherever they are"],
       },
       {
         id: 4,
         title: "Maintenance & Repair",
         icon: "🛠",
+        images: missionCardImages[4],
         taglines: ["Renovate without effort, gain comfort"],
       },
       {
         id: 5,
         title: "Darna Brocante",
         icon: "🗝",
+        images: missionCardImages[5],
         taglines: [
           "Zeal of old times in a talented application",
           "Authenticity has an address, and rare pieces have a place",
@@ -141,6 +197,7 @@ export default function Footer({ language }: FooterProps) {
         id: 6,
         title: "Charity & Donation",
         icon: "❤️",
+        images: missionCardImages[6],
         taglines: [
           "Ongoing charity... in every expensive piece",
           "Share the comfort, spread the love",
@@ -150,6 +207,7 @@ export default function Footer({ language }: FooterProps) {
         id: 7,
         title: "Sustainability & Recycling",
         icon: "♻️",
+        images: missionCardImages[7],
         taglines: [
           "Smart recycling... for a clean world",
           "Your furniture is renewed, and the earth's lifespan is extended",
@@ -159,16 +217,33 @@ export default function Footer({ language }: FooterProps) {
       },
       {
         id: 8,
-        title: "Product Gallery",
-        icon: "🖼",
-        categories: [
-          "غرف نوم",
-          "غرف أطفال",
-          "صالونات",
-          "Salle à manger",
-          "Tables de cuisine",
-          "Déco",
-        ],
+        title: "Kids Rooms",
+        icon: "🛏️",
+        images: missionCardImages[8],
+      },
+      {
+        id: 9,
+        title: "Living Rooms",
+        icon: "🪑",
+        images: missionCardImages[9],
+      },
+      {
+        id: 10,
+        title: "Dining Rooms",
+        icon: "🍽️",
+        images: missionCardImages[10],
+      },
+      {
+        id: 11,
+        title: "Kitchen Tables",
+        icon: "🪑",
+        images: missionCardImages[11],
+      },
+      {
+        id: 12,
+        title: "Decoration",
+        icon: "✨",
+        images: missionCardImages[12],
       },
     ],
     ar: [
@@ -176,6 +251,7 @@ export default function Footer({ language }: FooterProps) {
         id: 1,
         title: "الواجهة الرئيسية",
         icon: "🏠",
+        images: missionCardImages[1],
         taglines: [
           "دارنا – جدد بيتك… و اربح جيبك",
           "مع دارنا جديدك حبو، وقديمك نقدرو",
@@ -187,6 +263,7 @@ export default function Footer({ language }: FooterProps) {
         id: 2,
         title: "التسعير الذكي",
         icon: "💶",
+        images: missionCardImages[2],
         taglines: [
           "تقييم إلكتروني عادل، لا تناقش ولا تجادل",
           "Smart Price, Perfect Choice",
@@ -196,18 +273,21 @@ export default function Footer({ language }: FooterProps) {
         id: 3,
         title: "اللوجيستيك والتتبع",
         icon: "🚚",
+        images: missionCardImages[3],
         taglines: ["متاعك في أمان، تبعو وين ما كان"],
       },
       {
         id: 4,
         title: "الصيانة والترميم",
         icon: "🛠",
+        images: missionCardImages[4],
         taglines: ["Renover sans effort, gagnez le confort"],
       },
       {
         id: 5,
         title: "دارنا بروكنت",
         icon: "🗝",
+        images: missionCardImages[5],
         taglines: [
           "همة زمان في تطبيق فنان",
           "للأصالة عنوان، وللقطع النادرة مكان",
@@ -218,6 +298,7 @@ export default function Footer({ language }: FooterProps) {
         id: 6,
         title: "الأعمال الخيرية والتبرع",
         icon: "❤️",
+        images: missionCardImages[6],
         taglines: [
           "صدقة جارية… في كل قطعة غالية",
           "Share the comfort, spread the love",
@@ -227,6 +308,7 @@ export default function Footer({ language }: FooterProps) {
         id: 7,
         title: "الاستدامة وإعادة التدوير",
         icon: "♻️",
+        images: missionCardImages[7],
         taglines: [
           "تدوير ذكي… لعالم نقي",
           "أثاثك يتجدد، وعمر الأرض يتمدد",
@@ -236,16 +318,33 @@ export default function Footer({ language }: FooterProps) {
       },
       {
         id: 8,
-        title: "عرض المنتجات",
-        icon: "🖼",
-        categories: [
-          "غرف نوم",
-          "غرف أطفال",
-          "صالونات",
-          "Salle à manger",
-          "Tables de cuisine",
-          "Déco",
-        ],
+        title: "غرف أطفال",
+        icon: "🛏️",
+        images: missionCardImages[8],
+      },
+      {
+        id: 9,
+        title: "صالونات",
+        icon: "🪑",
+        images: missionCardImages[9],
+      },
+      {
+        id: 10,
+        title: "Salle à manger",
+        icon: "🍽️",
+        images: missionCardImages[10],
+      },
+      {
+        id: 11,
+        title: "Tables de cuisine",
+        icon: "🪑",
+        images: missionCardImages[11],
+      },
+      {
+        id: 12,
+        title: "Déco",
+        icon: "✨",
+        images: missionCardImages[12],
       },
     ],
     fr: [
@@ -253,6 +352,7 @@ export default function Footer({ language }: FooterProps) {
         id: 1,
         title: "Section Héroïque",
         icon: "🏠",
+        images: missionCardImages[1],
         taglines: [
           "Darna – Rafraîchissez votre maison... et gagnez votre poche",
           "Avec Darna, votre neuf est aimé, et votre ancien est valorisé",
@@ -264,6 +364,7 @@ export default function Footer({ language }: FooterProps) {
         id: 2,
         title: "Tarification Intelligente",
         icon: "💶",
+        images: missionCardImages[2],
         taglines: [
           "Prix intelligent, choix évident",
           "Smart Price, Perfect Choice",
@@ -273,18 +374,21 @@ export default function Footer({ language }: FooterProps) {
         id: 3,
         title: "Logistique et Suivi",
         icon: "🚚",
+        images: missionCardImages[3],
         taglines: ["Suivez votre confort"],
       },
       {
         id: 4,
         title: "Maintenance et Rénovation",
         icon: "🛠",
+        images: missionCardImages[4],
         taglines: ["Renover sans effort, gagnez le confort"],
       },
       {
         id: 5,
         title: "Darna Brocante",
         icon: "🗝",
+        images: missionCardImages[5],
         taglines: [
           "Darna brocante, chaque objet a une histoire",
           "Rare pieces for unique spaces",
@@ -294,6 +398,7 @@ export default function Footer({ language }: FooterProps) {
         id: 6,
         title: "Charité et Donation",
         icon: "❤️",
+        images: missionCardImages[6],
         taglines: [
           "Le partage commence par un geste simple",
           "Share the comfort, spread the love",
@@ -303,6 +408,7 @@ export default function Footer({ language }: FooterProps) {
         id: 7,
         title: "Durabilité et Recyclage",
         icon: "♻️",
+        images: missionCardImages[7],
         taglines: [
           "Re-think · Re-furnish · Re-love",
           "Rien ne se jette, tout se transforme avec Darna",
@@ -310,16 +416,33 @@ export default function Footer({ language }: FooterProps) {
       },
       {
         id: 8,
-        title: "Galerie de Produits",
-        icon: "🖼",
-        categories: [
-          "غرف نوم",
-          "غرف أطفال",
-          "صالونات",
-          "Salle à manger",
-          "Tables de cuisine",
-          "Déco",
-        ],
+        title: "غرف أطفال",
+        icon: "🛏️",
+        images: missionCardImages[8],
+      },
+      {
+        id: 9,
+        title: "صالونات",
+        icon: "🪑",
+        images: missionCardImages[9],
+      },
+      {
+        id: 10,
+        title: "Salle à manger",
+        icon: "🍽️",
+        images: missionCardImages[10],
+      },
+      {
+        id: 11,
+        title: "Tables de cuisine",
+        icon: "🪑",
+        images: missionCardImages[11],
+      },
+      {
+        id: 12,
+        title: "Déco",
+        icon: "✨",
+        images: missionCardImages[12],
       },
     ],
   };
@@ -358,7 +481,7 @@ export default function Footer({ language }: FooterProps) {
           {footerLabels.ourMission}
         </h2>
 
-        {/* 8 Cards Grid */}
+        {/* Mission Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {missionCards.map((card) => (
             <div
@@ -368,20 +491,14 @@ export default function Footer({ language }: FooterProps) {
               <div className="text-4xl mb-4">{card.icon}</div>
               <h3 className="text-xl font-bold mb-4">{card.title}</h3>
 
-              {card.categories ? (
-                <div className="space-y-4">
-                  {card.categories.map((category, idx) => (
-                    <div key={idx}>
-                      <ImageCarousel category={category} />
-                      <p className="text-sm font-semibold text-gray-200">
-                        {category}
-                      </p>
-                    </div>
-                  ))}
+              {card.images && (
+                <div className="mb-4">
+                  <ImageCarousel images={card.images} />
                 </div>
-              ) : (
+              )}
+              {card.taglines && (
                 <ul className="space-y-3">
-                  {card.taglines?.map((tagline, idx) => (
+                  {card.taglines.map((tagline, idx) => (
                     <li key={idx} className="text-sm text-gray-300 leading-relaxed">
                       "{tagline}"
                     </li>
