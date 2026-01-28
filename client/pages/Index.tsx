@@ -18,7 +18,7 @@ interface IndexProps {
 export default function Index({ language }: IndexProps) {
   const translations = {
     en: {
-      hero: "أيقونة التسعير الذكي",
+      hero: "Smart Price",
       heroDesc:
         "The ultimate multivendor marketplace connecting buyers with trusted sellers worldwide",
       shopNow: "Shop Now",
@@ -67,7 +67,7 @@ export default function Index({ language }: IndexProps) {
       premiumExperience: "Premium Shopping Experience",
     },
     ar: {
-      hero: "مرحبا بك في darna",
+      hero: " دارنا اختيارك الذكي  ",
       heroDesc:
         "سوق متعدد البائعين يربط المشترين مع البائعين الموثوقين في جميع أنحاء العالم",
       shopNow: "تسوق الآن",
@@ -116,7 +116,7 @@ export default function Index({ language }: IndexProps) {
       premiumExperience: "تجربة تسوق ممتازة",
     },
     fr: {
-      hero: "أيقونة التسعير الذكي",
+      hero: "Choix intelligent",
       heroDesc:
         "La place de marché multifournisseur ultime reliant les acheteurs aux vendeurs de confiance du monde entier",
       shopNow: "Acheter maintenant",
