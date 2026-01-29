@@ -450,17 +450,17 @@ export default function Footer({ language }: FooterProps) {
   const labels = {
     en: {
       ourMission: "Our Mission",
-      copyright: "© 2024 Darna. All rights reserved.",
+      copyright: "© 2026Darna. All rights reserved.",
       followUs: "Follow Us",
     },
     ar: {
       ourMission: "مهمتنا",
-      copyright: "© 2024 دارنا. جميع الحقوق محفوظة.",
+      copyright: "© 2026دارنا. جميع الحقوق محفوظة.",
       followUs: "تابعنا",
     },
     fr: {
       ourMission: "Notre Mission",
-      copyright: "© 2024 Darna. Tous droits réservés.",
+      copyright: "© 2026Darna. Tous droits réservés.",
       followUs: "Suivez-nous",
     },
   };
