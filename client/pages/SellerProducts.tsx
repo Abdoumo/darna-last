@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Plus, Package, Edit2, Trash2, X } from "lucide-react";
+import { ArrowLeft, Plus, Package, Edit2, Trash2, X, Wand2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -45,6 +45,8 @@ export default function SellerProducts({ language }: SellerProductsProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
+  const [suggestingPrice, setSuggestingPrice] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -335,8 +337,44 @@ export default function SellerProducts({ language }: SellerProductsProps) {
     }
   };
 
+  const handleSuggestPrice = async () => {
+    if (!formData.name || !formData.category) {
+      setError("Please fill in product name and category before suggesting a price");
+      return;
+    }
+
+    setSuggestingPrice(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/suggest-price", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          category: formData.category,
+          description: formData.description,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to suggest price");
+
+      const data = await response.json();
+      setFormData((prev) => ({ ...prev, price: data.suggestedPrice.toString() }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to suggest price");
+    } finally {
+      setSuggestingPrice(false);
+    }
+  };
+
   const ProductForm = () => (
     <form onSubmit={handleAddProduct} className="space-y-4">
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
+          {error}
+        </div>
+      )}
       <div className="space-y-2">
         <Label htmlFor="name">{t.productName}</Label>
         <Input
@@ -371,17 +409,29 @@ export default function SellerProducts({ language }: SellerProductsProps) {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="price">{t.price}</Label>
-          <Input
-            id="price"
-            type="number"
-            step="0.01"
-            placeholder={t.pricePlaceholder}
-            value={formData.price}
-            onChange={(e) => {
-              setFormData((prev) => ({ ...prev, price: e.target.value }));
-            }}
-            required
-          />
+          <div className="flex gap-2">
+            <Input
+              id="price"
+              type="number"
+              step="0.01"
+              placeholder={t.pricePlaceholder}
+              value={formData.price}
+              onChange={(e) => {
+                setFormData((prev) => ({ ...prev, price: e.target.value }));
+              }}
+              required
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleSuggestPrice}
+              disabled={suggestingPrice}
+              className="gap-2 whitespace-nowrap"
+            >
+              <Wand2 className="w-4 h-4" />
+              {suggestingPrice ? "..." : ""}
+            </Button>
+          </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="quantity">{t.quantity}</Label>
@@ -591,6 +641,7 @@ export default function SellerProducts({ language }: SellerProductsProps) {
           setIsOpen(open);
           if (!open) {
             setEditingProductId(null);
+            setError("");
             setFormData({
               name: "",
               price: "",

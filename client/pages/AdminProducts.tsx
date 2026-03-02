@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Trash2, Edit2, Plus, LogOut } from "lucide-react";
+import { Trash2, Edit2, Plus, LogOut, Wand2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -44,6 +44,7 @@ export default function AdminProducts() {
   const [error, setError] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [suggestingPrice, setSuggestingPrice] = useState(false);
   const [formData, setFormData] = useState<Partial<Product>>({
     name: "",
     price: 0,
@@ -160,6 +161,37 @@ export default function AdminProducts() {
     navigate("/signin");
   };
 
+  const handleSuggestPrice = async () => {
+    if (!formData.name || !formData.category) {
+      setError("Please fill in product name and category before suggesting a price");
+      return;
+    }
+
+    setSuggestingPrice(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/suggest-price", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          category: formData.category,
+          description: formData.description,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to suggest price");
+
+      const data = await response.json();
+      setFormData({ ...formData, price: data.suggestedPrice });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to suggest price");
+    } finally {
+      setSuggestingPrice(false);
+    }
+  };
+
   if (user?.role !== "admin") {
     return null;
   }
@@ -239,17 +271,29 @@ export default function AdminProducts() {
 
                 <div>
                   <Label htmlFor="price">Price *</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    value={formData.price || 0}
-                    onChange={(e) =>
-                      setFormData({ ...formData, price: parseFloat(e.target.value) })
-                    }
-                    placeholder="0.00"
-                    required
-                  />
+                  <div className="flex gap-2">
+                    <Input
+                      id="price"
+                      type="number"
+                      step="0.01"
+                      value={formData.price || 0}
+                      onChange={(e) =>
+                        setFormData({ ...formData, price: parseFloat(e.target.value) })
+                      }
+                      placeholder="0.00"
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleSuggestPrice}
+                      disabled={suggestingPrice}
+                      className="gap-2 whitespace-nowrap"
+                    >
+                      <Wand2 className="w-4 h-4" />
+                      {suggestingPrice ? "Suggesting..." : "Suggest"}
+                    </Button>
+                  </div>
                 </div>
 
                 <div>

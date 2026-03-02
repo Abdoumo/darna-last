@@ -17,7 +17,12 @@ export default defineConfig({
       },
     },
     fs: {
-      allow: ["./client", "./shared"],
+      allow: [
+        __dirname,
+        path.resolve(__dirname, "./client"),
+        path.resolve(__dirname, "./shared"),
+        path.resolve(__dirname, "./node_modules"),
+      ],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
     },
   },

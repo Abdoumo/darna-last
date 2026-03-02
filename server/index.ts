@@ -9,6 +9,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "./routes/products";
+import { suggestPrice } from "./routes/suggest-price";
 
 export function createServer() {
   const app = express();
@@ -32,6 +33,9 @@ export function createServer() {
   app.post("/api/products", createProduct);
   app.put("/api/products/:id", updateProduct);
   app.delete("/api/products/:id", deleteProduct);
+
+  // Price suggestion route
+  app.post("/api/suggest-price", suggestPrice);
 
   return app;
 }
