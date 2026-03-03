@@ -60,27 +60,27 @@ export const getProductById: RequestHandler = (req, res) => {
 export const createProduct: RequestHandler = (req, res) => {
   const { name, price, category, seller, image, description, stock, sellerId, sellerEmail, quantity } = req.body;
 
-  if (!name || !price || !category) {
-    res.status(400).json({ error: "Missing required fields" });
+  if (!name || price === undefined || price === null || !category) {
+    res.status(400).json({ error: "Missing required fields: name, price, category" });
     return;
   }
 
   const products = readProducts();
   const newProduct: Product = {
     id: Math.random().toString(36).substr(2, 9),
-    name,
-    price: parseFloat(price),
-    category,
-    seller: seller || "Unknown Seller",
-    image: image || "https://via.placeholder.com/400x300",
+    name: String(name),
+    price: typeof price === "string" ? parseFloat(price) : Number(price),
+    category: String(category),
+    seller: seller ? String(seller) : "Unknown Seller",
+    image: image ? String(image) : "https://via.placeholder.com/400x300",
     rating: 5,
     reviews: 0,
-    description,
-    stock: stock || quantity || 10,
-    sellerId,
-    sellerEmail,
+    description: description ? String(description) : undefined,
+    stock: stock !== undefined ? Number(stock) : (quantity !== undefined ? Number(quantity) : 10),
+    sellerId: sellerId ? String(sellerId) : undefined,
+    sellerEmail: sellerEmail ? String(sellerEmail) : undefined,
     createdAt: new Date().toISOString(),
-    quantity: quantity || stock || 10,
+    quantity: quantity !== undefined ? Number(quantity) : (stock !== undefined ? Number(stock) : 10),
   };
 
   products.push(newProduct);
@@ -101,14 +101,14 @@ export const updateProduct: RequestHandler = (req, res) => {
 
   const updatedProduct: Product = {
     ...products[productIndex],
-    name: name || products[productIndex].name,
-    price: price !== undefined ? parseFloat(price) : products[productIndex].price,
-    category: category || products[productIndex].category,
-    seller: seller || products[productIndex].seller,
-    image: image || products[productIndex].image,
-    description: description !== undefined ? description : products[productIndex].description,
-    stock: stock !== undefined ? stock : products[productIndex].stock,
-    quantity: quantity !== undefined ? quantity : products[productIndex].quantity,
+    name: name !== undefined ? String(name) : products[productIndex].name,
+    price: price !== undefined ? (typeof price === "string" ? parseFloat(price) : Number(price)) : products[productIndex].price,
+    category: category !== undefined ? String(category) : products[productIndex].category,
+    seller: seller !== undefined ? String(seller) : products[productIndex].seller,
+    image: image !== undefined ? String(image) : products[productIndex].image,
+    description: description !== undefined ? String(description) : products[productIndex].description,
+    stock: stock !== undefined ? Number(stock) : products[productIndex].stock,
+    quantity: quantity !== undefined ? Number(quantity) : products[productIndex].quantity,
   };
 
   products[productIndex] = updatedProduct;
