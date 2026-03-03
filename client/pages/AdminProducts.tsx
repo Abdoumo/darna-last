@@ -166,12 +166,19 @@ export default function AdminProducts() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
+        const imageData = event.target?.result as string;
         setFormData((prev) => ({
           ...prev,
-          image: event.target?.result as string,
+          image: imageData,
         }));
       };
       reader.readAsDataURL(file);
+    } else {
+      // Clear image if no file is selected
+      setFormData((prev) => ({
+        ...prev,
+        image: "",
+      }));
     }
   };
 

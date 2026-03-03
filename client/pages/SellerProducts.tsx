@@ -368,138 +368,6 @@ export default function SellerProducts({ language }: SellerProductsProps) {
     }
   };
 
-  const ProductForm = () => (
-    <form onSubmit={handleAddProduct} className="space-y-4">
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
-          {error}
-        </div>
-      )}
-      <div className="space-y-2">
-        <Label htmlFor="name">{t.productName}</Label>
-        <Input
-          id="name"
-          placeholder={t.productNamePlaceholder}
-          value={formData.name}
-          onChange={(e) => {
-            setFormData((prev) => ({ ...prev, name: e.target.value }));
-          }}
-          required
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>{t.category}</Label>
-        <Select value={formData.category} onValueChange={(value) => {
-          setFormData((prev) => ({ ...prev, category: value }));
-        }}>
-          <SelectTrigger>
-            <SelectValue placeholder={t.selectCategory} />
-          </SelectTrigger>
-          <SelectContent>
-            {getCategoryOptions().map((cat) => (
-              <SelectItem key={cat} value={cat}>
-                {cat}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="price">{t.price}</Label>
-          <div className="flex gap-2">
-            <Input
-              id="price"
-              type="number"
-              step="0.01"
-              placeholder={t.pricePlaceholder}
-              value={formData.price}
-              onChange={(e) => {
-                setFormData((prev) => ({ ...prev, price: e.target.value }));
-              }}
-              required
-            />
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleSuggestPrice}
-              disabled={suggestingPrice}
-              className="gap-2 whitespace-nowrap"
-            >
-              <Wand2 className="w-4 h-4" />
-              {suggestingPrice ? "..." : ""}
-            </Button>
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="quantity">{t.quantity}</Label>
-          <Input
-            id="quantity"
-            type="number"
-            placeholder={t.quantityPlaceholder}
-            value={formData.quantity}
-            onChange={(e) => {
-              setFormData((prev) => ({ ...prev, quantity: e.target.value }));
-            }}
-            required
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="description">{t.description}</Label>
-        <Textarea
-          id="description"
-          placeholder={t.descriptionPlaceholder}
-          value={formData.description}
-          onChange={(e) => {
-            setFormData((prev) => ({ ...prev, description: e.target.value }));
-          }}
-          rows={4}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="image">{t.productImage}</Label>
-        <div className="flex items-center gap-2">
-          <Input
-            id="image"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="flex-1"
-          />
-        </div>
-        {formData.image && (
-          <div className="mt-2">
-            <img
-              src={formData.image}
-              alt="Product preview"
-              className="w-24 h-24 object-cover rounded-lg border border-border"
-            />
-          </div>
-        )}
-      </div>
-
-      <div className="flex gap-2 justify-end pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => setIsOpen(false)}
-        >
-          {t.cancel}
-        </Button>
-        <Button
-          type="submit"
-          className="bg-primary hover:bg-primary/90 text-primary-foreground"
-        >
-          {editingProductId ? t.updateProduct : t.save}
-        </Button>
-      </div>
-    </form>
-  );
 
   return (
     <div className={`w-full min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 ${isRtl ? "rtl" : "ltr"}`} dir={isRtl ? "rtl" : "ltr"}>
@@ -656,7 +524,136 @@ export default function SellerProducts({ language }: SellerProductsProps) {
             <DialogHeader>
               <DialogTitle>{editingProductId ? t.editProduct : t.addNewProduct}</DialogTitle>
             </DialogHeader>
-            <ProductForm />
+            <form onSubmit={handleAddProduct} className="space-y-4">
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
+                  {error}
+                </div>
+              )}
+              <div className="space-y-2">
+                <Label htmlFor="name">{t.productName}</Label>
+                <Input
+                  id="name"
+                  placeholder={t.productNamePlaceholder}
+                  value={formData.name}
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, name: e.target.value }));
+                  }}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>{t.category}</Label>
+                <Select value={formData.category} onValueChange={(value) => {
+                  setFormData((prev) => ({ ...prev, category: value }));
+                }}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={t.selectCategory} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getCategoryOptions().map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="price">{t.price}</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="price"
+                      type="number"
+                      step="0.01"
+                      placeholder={t.pricePlaceholder}
+                      value={formData.price}
+                      onChange={(e) => {
+                        setFormData((prev) => ({ ...prev, price: e.target.value }));
+                      }}
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleSuggestPrice}
+                      disabled={suggestingPrice}
+                      className="gap-2 whitespace-nowrap"
+                    >
+                      <Wand2 className="w-4 h-4" />
+                      {suggestingPrice ? "..." : ""}
+                    </Button>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="quantity">{t.quantity}</Label>
+                  <Input
+                    id="quantity"
+                    type="number"
+                    placeholder={t.quantityPlaceholder}
+                    value={formData.quantity}
+                    onChange={(e) => {
+                      setFormData((prev) => ({ ...prev, quantity: e.target.value }));
+                    }}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description">{t.description}</Label>
+                <Textarea
+                  id="description"
+                  placeholder={t.descriptionPlaceholder}
+                  value={formData.description}
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, description: e.target.value }));
+                  }}
+                  rows={4}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="image">{t.productImage}</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="flex-1"
+                  />
+                </div>
+                {formData.image && (
+                  <div className="mt-2">
+                    <img
+                      src={formData.image}
+                      alt="Product preview"
+                      className="w-24 h-24 object-cover rounded-lg border border-border"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex gap-2 justify-end pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {t.cancel}
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                >
+                  {editingProductId ? t.updateProduct : t.save}
+                </Button>
+              </div>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
