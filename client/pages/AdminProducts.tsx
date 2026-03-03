@@ -161,6 +161,20 @@ export default function AdminProducts() {
     navigate("/signin");
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setFormData((prev) => ({
+          ...prev,
+          image: event.target?.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSuggestPrice = async () => {
     if (!formData.name || !formData.category) {
       setError("Please fill in product name and category before suggesting a price");
@@ -348,15 +362,22 @@ export default function AdminProducts() {
                 </div>
 
                 <div>
-                  <Label htmlFor="image">Image URL</Label>
+                  <Label htmlFor="image">Product Image</Label>
                   <Input
                     id="image"
-                    value={formData.image || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, image: e.target.value })
-                    }
-                    placeholder="https://example.com/image.jpg"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
                   />
+                  {formData.image && (
+                    <div className="mt-3">
+                      <img
+                        src={formData.image}
+                        alt="Product preview"
+                        className="w-24 h-24 object-cover rounded-lg border border-border"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
