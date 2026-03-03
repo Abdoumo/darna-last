@@ -166,9 +166,9 @@ export default function SellerProducts({ language }: SellerProductsProps) {
         const response = await fetch("/api/products");
         if (!response.ok) throw new Error("Failed to load products");
         const allProducts: Product[] = await response.json();
-        // Filter to show only this seller's products
+        // Filter to show only this seller's products (by email)
         const sellerProducts = user
-          ? allProducts.filter((p: Product) => p.sellerId === user.id)
+          ? allProducts.filter((p: Product) => p.sellerEmail === user.email)
           : [];
         setProducts(sellerProducts);
       } catch (error) {
