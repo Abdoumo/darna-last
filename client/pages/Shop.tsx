@@ -183,32 +183,7 @@ export default function Shop({ language }: ShopProps) {
         description: p.description,
       }));
 
-      // Also check for seller products in localStorage (for backwards compatibility)
-      const sellerProducts: Product[] = [];
-      const allStoredProducts = localStorage.getItem("darna-all-products");
-      if (allStoredProducts) {
-        try {
-          const parsed = JSON.parse(allStoredProducts);
-          sellerProducts.push(
-            ...parsed.map((p: any) => ({
-              id: p.id,
-              name: p.name,
-              price: p.price,
-              rating: 4.5,
-              reviews: 0,
-              seller: p.sellerEmail || "Seller",
-              category: p.category,
-              description: p.description,
-              quantity: p.quantity,
-              image: p.image || `https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop`,
-            }))
-          );
-        } catch (error) {
-          console.error("Failed to load seller products:", error);
-        }
-      }
-
-      setAllProducts([...formattedProducts, ...sellerProducts]);
+      setAllProducts(formattedProducts);
     } catch (error) {
       console.error("Failed to load products from API:", error);
       // Fallback to local products if API fails
@@ -226,15 +201,15 @@ export default function Shop({ language }: ShopProps) {
     };
 
     window.addEventListener("focus", handleFocus);
-    // Also listen for custom event from storage changes
-    const handleStorageChange = () => {
+    // Also listen for custom event from product updates
+    const handleProductsChange = () => {
       loadProducts();
     };
-    window.addEventListener("storage-updated", handleStorageChange);
+    window.addEventListener("products-updated", handleProductsChange);
 
     return () => {
       window.removeEventListener("focus", handleFocus);
-      window.removeEventListener("storage-updated", handleStorageChange);
+      window.removeEventListener("products-updated", handleProductsChange);
     };
   }, []);
 

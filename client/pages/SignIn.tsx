@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +21,20 @@ export default function SignIn({ language }: SignInProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("buyer");
+
+  const DEFAULT_EMAIL = "bedoushop@gmail.com";
+  const DEFAULT_PASSWORD = "bedoushop@gmail.com";
+
+  useEffect(() => {
+    if (activeTab === "seller" || activeTab === "admin") {
+      setEmail(DEFAULT_EMAIL);
+      setPassword(DEFAULT_PASSWORD);
+    } else {
+      setEmail("");
+      setPassword("");
+    }
+  }, [activeTab]);
 
   const translations = {
     en: {
@@ -121,7 +135,7 @@ export default function SignIn({ language }: SignInProps) {
           </div>
 
           {/* Tabs */}
-          <Tabs defaultValue="buyer" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="buyer">{t.buyer}</TabsTrigger>
               <TabsTrigger value="seller">{t.seller}</TabsTrigger>

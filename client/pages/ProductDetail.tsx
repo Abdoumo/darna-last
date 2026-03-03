@@ -112,32 +112,12 @@ export default function ProductDetail({ language }: ProductDetailProps) {
           category: apiProduct.category,
           image: apiProduct.image || "https://via.placeholder.com/600x500",
           description: apiProduct.description,
-          quantity: apiProduct.stock || 10,
+          quantity: apiProduct.quantity || apiProduct.stock || 10,
         };
 
         setProduct(formattedProduct);
       } catch (error) {
         console.error("Failed to load product:", error);
-
-        // Fallback: check localStorage for seller products
-        const allStoredProducts = localStorage.getItem("darna-all-products");
-        if (allStoredProducts) {
-          try {
-            const parsed = JSON.parse(allStoredProducts);
-            const found = parsed.find((p: any) => p.id === id);
-            if (found) {
-              const formattedProduct: Product = {
-                ...found,
-                rating: 4.5,
-                reviews: 0,
-                image: found.image || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=500&fit=crop",
-              };
-              setProduct(formattedProduct);
-            }
-          } catch (parseError) {
-            console.error("Failed to load seller products:", parseError);
-          }
-        }
       }
     };
 

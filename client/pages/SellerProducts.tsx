@@ -159,104 +159,97 @@ export default function SellerProducts({ language }: SellerProductsProps) {
   const t = translations[language];
   const isRtl = language === "ar";
 
-  // Load products from global localStorage (sellers' products)
+  // Load products from API (sellers' products)
   useEffect(() => {
-    const allProducts = localStorage.getItem("darna-all-products");
-    if (allProducts) {
+    const loadProducts = async () => {
       try {
-        const parsedProducts = JSON.parse(allProducts);
+        const response = await fetch("/api/products");
+        if (!response.ok) throw new Error("Failed to load products");
+        const allProducts: Product[] = await response.json();
         // Filter to show only this seller's products
         const sellerProducts = user
-          ? parsedProducts.filter((p: Product) => p.sellerId === user.id)
+          ? allProducts.filter((p: Product) => p.sellerId === user.id)
           : [];
         setProducts(sellerProducts);
       } catch (error) {
-        console.error("Failed to parse products:", error);
+        console.error("Failed to load products:", error);
       }
-    }
+    };
+
+    loadProducts();
   }, [user]);
 
-  const saveProductGlobally = (newProduct: Product) => {
-    // Load all products
-    const allProducts = localStorage.getItem("darna-all-products");
-    let products: Product[] = [];
-    if (allProducts) {
-      try {
-        products = JSON.parse(allProducts);
-      } catch (error) {
-        console.error("Failed to parse products:", error);
-      }
+  const saveProductGlobally = async (newProduct: Product) => {
+    try {
+      const response = await fetch("/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newProduct),
+      });
+
+      if (!response.ok) throw new Error("Failed to create product");
+
+      const savedProduct = await response.json();
+      // Update local state
+      setProducts((prev) => [...prev, savedProduct]);
+
+      // Notify shop page of changes
+      window.dispatchEvent(new Event("products-updated"));
+    } catch (error) {
+      console.error("Failed to save product:", error);
+      setError(error instanceof Error ? error.message : "Failed to save product");
     }
-
-    // Add new product
-    products.push(newProduct);
-
-    // Save back to global storage
-    localStorage.setItem("darna-all-products", JSON.stringify(products));
-
-    // Update local state
-    setProducts((prev) => [...prev, newProduct]);
-
-    // Notify shop page of changes
-    window.dispatchEvent(new Event("storage-updated"));
   };
 
-  const deleteProductGlobally = (id: string) => {
-    // Load all products
-    const allProducts = localStorage.getItem("darna-all-products");
-    let products: Product[] = [];
-    if (allProducts) {
-      try {
-        products = JSON.parse(allProducts);
-      } catch (error) {
-        console.error("Failed to parse products:", error);
-      }
+  const deleteProductGlobally = async (id: string) => {
+    try {
+      const response = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Failed to delete product");
+
+      // Update local state
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+
+      // Notify shop page of changes
+      window.dispatchEvent(new Event("products-updated"));
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+      setError(error instanceof Error ? error.message : "Failed to delete product");
     }
-
-    // Remove product
-    products = products.filter((p) => p.id !== id);
-
-    // Save back to global storage
-    localStorage.setItem("darna-all-products", JSON.stringify(products));
-
-    // Update local state
-    setProducts((prev) => prev.filter((p) => p.id !== id));
-
-    // Notify shop page of changes
-    window.dispatchEvent(new Event("storage-updated"));
   };
 
-  const updateProductGlobally = (updatedProduct: Product) => {
-    // Load all products
-    const allProducts = localStorage.getItem("darna-all-products");
-    let products: Product[] = [];
-    if (allProducts) {
-      try {
-        products = JSON.parse(allProducts);
-      } catch (error) {
-        console.error("Failed to parse products:", error);
-      }
+  const updateProductGlobally = async (updatedProduct: Product) => {
+    try {
+      const response = await fetch(`/api/products/${updatedProduct.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedProduct),
+      });
+
+      if (!response.ok) throw new Error("Failed to update product");
+
+      const savedProduct = await response.json();
+      // Update local state
+      setProducts((prev) =>
+        prev.map((p) => (p.id === updatedProduct.id ? savedProduct : p))
+      );
+
+      // Notify shop page of changes
+      window.dispatchEvent(new Event("products-updated"));
+    } catch (error) {
+      console.error("Failed to update product:", error);
+      setError(error instanceof Error ? error.message : "Failed to update product");
     }
-
-    // Update product
-    products = products.map((p) => (p.id === updatedProduct.id ? updatedProduct : p));
-
-    // Save back to global storage
-    localStorage.setItem("darna-all-products", JSON.stringify(products));
-
-    // Update local state
-    setProducts((prev) =>
-      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
-    );
-
-    // Notify shop page of changes
-    window.dispatchEvent(new Event("storage-updated"));
   };
 
-  const handleAddProduct = (e: React.FormEvent) => {
+  const handleAddProduct = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
     if (!formData.name || !formData.price || !formData.quantity || !formData.category) {
+      setError("Please fill in all required fields");
       return;
     }
 
@@ -276,7 +269,7 @@ export default function SellerProducts({ language }: SellerProductsProps) {
         createdAt: products.find((p) => p.id === editingProductId)?.createdAt || new Date().toISOString(),
         image: formData.image || undefined,
       };
-      updateProductGlobally(updatedProduct);
+      await updateProductGlobally(updatedProduct);
     } else {
       // Create new product
       const newProduct: Product = {
@@ -291,7 +284,7 @@ export default function SellerProducts({ language }: SellerProductsProps) {
         createdAt: new Date().toISOString(),
         image: formData.image || undefined,
       };
-      saveProductGlobally(newProduct);
+      await saveProductGlobally(newProduct);
     }
 
     setFormData({
@@ -306,8 +299,10 @@ export default function SellerProducts({ language }: SellerProductsProps) {
     setIsOpen(false);
   };
 
-  const handleDeleteProduct = (id: string) => {
-    deleteProductGlobally(id);
+  const handleDeleteProduct = async (id: string) => {
+    if (confirm("Are you sure you want to delete this product?")) {
+      await deleteProductGlobally(id);
+    }
   };
 
   const handleEditProduct = (product: Product) => {
