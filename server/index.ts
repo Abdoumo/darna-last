@@ -7,7 +7,6 @@ import {
   getProductById,
   createProduct,
   updateProduct,
-  deleteProduct,
 } from "./routes/products";
 import { suggestPrice } from "./routes/suggest-price";
 
@@ -32,7 +31,6 @@ export function createServer() {
   app.get("/api/products/:id", getProductById);
   app.post("/api/products", createProduct);
   app.put("/api/products/:id", updateProduct);
-  app.delete("/api/products/:id", deleteProduct);
 
   // Price suggestion route
   app.post("/api/suggest-price", suggestPrice);
