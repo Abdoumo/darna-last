@@ -10,7 +10,7 @@ export interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string, role: "buyer" | "seller" | "admin") => Promise<void>;
+  login: (email: string, password: string, role: "buyer" | "seller" | "admin") => { success: boolean; error?: string };
   signup: (email: string, password: string, name: string, role: "buyer" | "seller" | "admin") => void;
   logout: () => void;
   isLoading: boolean;
@@ -36,14 +36,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string, role: "buyer" | "seller" | "admin") => {
+  const login = (email: string, password: string, role: "buyer" | "seller" | "admin") => {
     // Validate admin credentials
     if (role === "admin") {
       const ADMIN_EMAIL = "refurnish246@gmail.com";
       const ADMIN_PASSWORD = "123456789";
 
       if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
-        throw new Error("Invalid admin credentials");
+        return { success: false, error: "Invalid admin credentials" };
       }
     }
 
@@ -57,6 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     localStorage.setItem("darna-user", JSON.stringify(newUser));
     setUser(newUser);
+    return { success: true };
   };
 
   const signup = (email: string, password: string, name: string, role: "buyer" | "seller") => {

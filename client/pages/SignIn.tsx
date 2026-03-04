@@ -117,8 +117,14 @@ export default function SignIn({ language }: SignInProps) {
       }
 
       await new Promise((resolve) => setTimeout(resolve, 800));
-      await login(email, password, role as "buyer" | "seller" | "admin");
-      setLoading(false);
+      const result = login(email, password, role as "buyer" | "seller" | "admin");
+
+      if (!result.success) {
+        setError(result.error || t.error);
+        setLoading(false);
+        return;
+      }
+
       if (role === "admin") {
         navigate("/admin/products");
       } else {
