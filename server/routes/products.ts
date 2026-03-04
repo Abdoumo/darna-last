@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
-import * as fs from "fs";
-import * as path from "path";
+import { supabase } from "../supabase";
 
 export interface Product {
   id: string;
@@ -13,156 +12,224 @@ export interface Product {
   reviews: number;
   description?: string;
   stock?: number;
-  sellerId?: string;
-  sellerEmail?: string;
+  seller_id?: string;
+  seller_email?: string;
   createdAt?: string;
   quantity?: number;
 }
 
-const PRODUCTS_FILE = path.join(process.cwd(), "products.json");
+interface UserInfo {
+  id?: string;
+  email?: string;
+  role?: "admin" | "seller" | "buyer";
+}
 
-// Helper functions to read/write products from JSON file
-function readProducts(): Product[] {
+// Helper to extract user from request headers
+function getUserFromRequest(req: any): UserInfo | null {
   try {
-    if (fs.existsSync(PRODUCTS_FILE)) {
-      const data = fs.readFileSync(PRODUCTS_FILE, "utf-8");
-      return JSON.parse(data);
+    // Check Authorization header for user JSON
+    const authHeader = req.headers["x-user"];
+    if (authHeader) {
+      return JSON.parse(authHeader);
     }
+    // Check body for user info
+    if (req.body.user) {
+      return req.body.user;
+    }
+    return null;
   } catch (error) {
-    console.error("Error reading products file:", error);
-    throw new Error(`Failed to read products file: ${error instanceof Error ? error.message : String(error)}`);
-  }
-  return [];
-}
-
-function writeProducts(products: Product[]): void {
-  try {
-    fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(products, null, 2), "utf-8");
-  } catch (error) {
-    console.error("Error writing products file:", error);
-    throw new Error(`Failed to write products file: ${error instanceof Error ? error.message : String(error)}`);
+    return null;
   }
 }
 
-export const getProducts: RequestHandler = (_req, res) => {
+// Helper to check if user can create/delete products
+function canModifyProducts(user: UserInfo | null): boolean {
+  return user?.role === "admin" || user?.role === "seller";
+}
+
+// Helper to check if user can modify specific product
+function canModifyProduct(user: UserInfo | null, product: Product): boolean {
+  if (!user) return false;
+  // Admin can modify any product
+  if (user.role === "admin") return true;
+  // Seller can only modify their own products
+  if (user.role === "seller") {
+    return user.id === product.seller_id || user.email === product.seller_email;
+  }
+  return false;
+}
+
+export const getProducts: RequestHandler = async (_req, res) => {
   try {
-    const products = readProducts();
-    res.json(products);
+    const { data, error } = await supabase.from("products").select("*");
+
+    if (error) {
+      console.error("Supabase error:", error);
+      res.status(500).json({ error: "Failed to fetch products" });
+      return;
+    }
+
+    res.json(data || []);
   } catch (error) {
     console.error("Error getting products:", error);
     res.status(500).json({ error: "Failed to get products" });
   }
 };
 
-export const getProductById: RequestHandler = (req, res) => {
+export const getProductById: RequestHandler = async (req, res) => {
   try {
-    const products = readProducts();
-    const product = products.find((p) => p.id === req.params.id);
-    if (!product) {
-      res.status(404).json({ error: "Product not found" });
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", req.params.id)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") {
+        res.status(404).json({ error: "Product not found" });
+        return;
+      }
+      console.error("Supabase error:", error);
+      res.status(500).json({ error: "Failed to fetch product" });
       return;
     }
-    res.json(product);
+
+    res.json(data);
   } catch (error) {
     console.error("Error getting product:", error);
     res.status(500).json({ error: "Failed to get product" });
   }
 };
 
-export const createProduct: RequestHandler = (req, res) => {
+export const createProduct: RequestHandler = async (req, res) => {
   try {
-    const { name, price, category, seller, image, description, stock, sellerId, sellerEmail, quantity } = req.body;
+    const newProduct = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: "Test Product",
+      price: 5,
+      category: "Other",
+      seller: "You",
+      image: "",
+      rating: 5,
+      reviews: 0,
+      description: "This is a test product",
+      stock: 10,
+      seller_id: "test-id",
+      seller_email: "you@example.com",
+    };
 
-    if (!name || price === undefined || price === null || !category) {
-      res.status(400).json({ error: "Missing required fields: name, price, category" });
+    const { data, error } = await supabase
+      .from("products")
+      .insert([newProduct])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase error:", error);
+      res.status(500).json({ error: "Failed to save product" });
       return;
     }
 
-    try {
-      const products = readProducts();
-      const newProduct: Product = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: String(name).trim(),
-        price: typeof price === "string" ? parseFloat(price) : Number(price),
-        category: String(category).trim(),
-        seller: seller ? String(seller).trim() : (sellerEmail ? String(sellerEmail).trim() : "Unknown Seller"),
-        image: image ? String(image) : "https://via.placeholder.com/400x300",
-        rating: 5,
-        reviews: 0,
-        description: description ? String(description).trim() : undefined,
-        stock: stock !== undefined ? Number(stock) : (quantity !== undefined ? Number(quantity) : 10),
-        sellerId: sellerId ? String(sellerId) : undefined,
-        sellerEmail: sellerEmail ? String(sellerEmail) : undefined,
-        createdAt: new Date().toISOString(),
-        quantity: quantity !== undefined ? Number(quantity) : (stock !== undefined ? Number(stock) : 10),
-      };
-
-      products.push(newProduct);
-      writeProducts(products);
-      res.status(201).json(newProduct);
-    } catch (fileError) {
-      console.error("Error writing product file:", fileError);
-      res.status(500).json({ error: "Failed to save product" });
-    }
+    res.status(201).json(data);
   } catch (error) {
     console.error("Error creating product:", error);
     res.status(500).json({ error: "Failed to create product" });
   }
 };
 
-export const updateProduct: RequestHandler = (req, res) => {
+export const updateProduct: RequestHandler = async (req, res) => {
   try {
+    const user = getUserFromRequest(req);
     const { id } = req.params;
     const { name, price, category, seller, image, description, stock, quantity } = req.body;
 
-    try {
-      const products = readProducts();
-      const productIndex = products.findIndex((p) => p.id === id);
-      if (productIndex === -1) {
-        res.status(404).json({ error: "Product not found" });
-        return;
-      }
+    // First, check if product exists
+    const { data: existingProduct, error: fetchError } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-      const updatedProduct: Product = {
-        ...products[productIndex],
-        name: name !== undefined ? String(name).trim() : products[productIndex].name,
-        price: price !== undefined ? (typeof price === "string" ? parseFloat(price) : Number(price)) : products[productIndex].price,
-        category: category !== undefined ? String(category).trim() : products[productIndex].category,
-        seller: seller !== undefined ? String(seller).trim() : products[productIndex].seller,
-        image: image !== undefined ? String(image) : products[productIndex].image,
-        description: description !== undefined ? String(description).trim() : products[productIndex].description,
-        stock: stock !== undefined ? Number(stock) : products[productIndex].stock,
-        quantity: quantity !== undefined ? Number(quantity) : products[productIndex].quantity,
-      };
-
-      products[productIndex] = updatedProduct;
-      writeProducts(products);
-      res.json(updatedProduct);
-    } catch (fileError) {
-      console.error("Error writing product file:", fileError);
-      res.status(500).json({ error: "Failed to save product" });
+    if (fetchError || !existingProduct) {
+      res.status(404).json({ error: "Product not found" });
+      return;
     }
+
+    // Check if user has permission to update this product
+    if (!canModifyProduct(user, existingProduct)) {
+      res.status(403).json({ error: "You can only update your own products" });
+      return;
+    }
+
+    const updatedProduct = {
+      name: name !== undefined ? String(name).trim() : existingProduct.name,
+      price: price !== undefined ? (typeof price === "string" ? parseFloat(price) : Number(price)) : existingProduct.price,
+      category: category !== undefined ? String(category).trim() : existingProduct.category,
+      seller: seller !== undefined ? String(seller).trim() : existingProduct.seller,
+      image: image !== undefined ? String(image) : existingProduct.image,
+      description: description !== undefined ? String(description).trim() : existingProduct.description,
+      stock: stock !== undefined ? Number(stock) : existingProduct.stock,
+      quantity: quantity !== undefined ? Number(quantity) : existingProduct.quantity,
+      seller_id: existingProduct.seller_id,
+      seller_email: existingProduct.seller_email,
+    };
+
+    const { data, error } = await supabase
+      .from("products")
+      .update(updatedProduct)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase error:", error);
+      res.status(500).json({ error: "Failed to update product" });
+      return;
+    }
+
+    res.json(data);
   } catch (error) {
     console.error("Error updating product:", error);
     res.status(500).json({ error: "Failed to update product" });
   }
 };
 
-export const deleteProduct: RequestHandler = (req, res) => {
+export const deleteProduct: RequestHandler = async (req, res) => {
   try {
+    const user = getUserFromRequest(req);
     const { id } = req.params;
-    const products = readProducts();
-    const productIndex = products.findIndex((p) => p.id === id);
 
-    if (productIndex === -1) {
+    // First, fetch the product
+    const { data: productToDelete, error: fetchError } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (fetchError || !productToDelete) {
       res.status(404).json({ error: "Product not found" });
       return;
     }
 
-    const deletedProduct = products[productIndex];
-    const updatedProducts = products.filter((p) => p.id !== id);
-    writeProducts(updatedProducts);
-    res.json(deletedProduct);
+    // Check if user has permission to delete this product
+    if (!canModifyProduct(user, productToDelete)) {
+      res.status(403).json({ error: "You can only delete your own products" });
+      return;
+    }
+
+    // Delete the product
+    const { error: deleteError } = await supabase
+      .from("products")
+      .delete()
+      .eq("id", id);
+
+    if (deleteError) {
+      console.error("Supabase error:", deleteError);
+      res.status(500).json({ error: "Failed to delete product" });
+      return;
+    }
+
+    res.json(productToDelete);
   } catch (error) {
     console.error("Error deleting product:", error);
     res.status(500).json({ error: "Failed to delete product" });

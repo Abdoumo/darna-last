@@ -98,11 +98,17 @@ export default function AdminProducts() {
         // Update product
         const response = await fetch(`/api/products/${editingId}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "x-user": JSON.stringify(user)
+          },
           body: JSON.stringify(formData),
         });
 
-        if (!response.ok) throw new Error("Failed to update product");
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to update product");
+        }
 
         const updatedProduct = await response.json();
         setProducts(products.map((p) => (p.id === editingId ? updatedProduct : p)));
@@ -110,11 +116,17 @@ export default function AdminProducts() {
         // Create product
         const response = await fetch("/api/products", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "x-user": JSON.stringify(user)
+          },
           body: JSON.stringify(formData),
         });
 
-        if (!response.ok) throw new Error("Failed to create product");
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to create product");
+        }
 
         const newProduct = await response.json();
         setProducts([...products, newProduct]);
@@ -147,8 +159,16 @@ export default function AdminProducts() {
     if (!confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      const response = await fetch(`/api/products/${id}`, { method: "DELETE" });
-      if (!response.ok) throw new Error("Failed to delete product");
+      const response = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+        headers: {
+          "x-user": JSON.stringify(user)
+        }
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete product");
+      }
 
       setProducts(products.filter((p) => p.id !== id));
     } catch (err) {

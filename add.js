@@ -17,8 +17,8 @@ async function addProduct() {
       .from("products")
       .insert([
         {
-            id: "test-uuid",
-          name: "Test Product",
+            id: "tedfssfsdfsf",
+          name: "sdfsdfsdf",
           price: 5,
           category: "Other",
           seller: "You",
@@ -30,6 +30,7 @@ async function addProduct() {
           seller_id: "test-id",
           seller_email: "you@example.com"
         }
+        
       ])
       .select()
       .single();

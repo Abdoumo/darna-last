@@ -183,11 +183,17 @@ export default function SellerProducts({ language }: SellerProductsProps) {
     try {
       const response = await fetch("/api/products", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-user": JSON.stringify(user)
+        },
         body: JSON.stringify(newProduct),
       });
 
-      if (!response.ok) throw new Error("Failed to create product");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create product");
+      }
 
       const savedProduct = await response.json();
       // Update local state
@@ -205,9 +211,15 @@ export default function SellerProducts({ language }: SellerProductsProps) {
     try {
       const response = await fetch(`/api/products/${id}`, {
         method: "DELETE",
+        headers: {
+          "x-user": JSON.stringify(user)
+        },
       });
 
-      if (!response.ok) throw new Error("Failed to delete product");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete product");
+      }
 
       // Update local state
       setProducts((prev) => prev.filter((p) => p.id !== id));
@@ -224,11 +236,17 @@ export default function SellerProducts({ language }: SellerProductsProps) {
     try {
       const response = await fetch(`/api/products/${updatedProduct.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-user": JSON.stringify(user)
+        },
         body: JSON.stringify(updatedProduct),
       });
 
-      if (!response.ok) throw new Error("Failed to update product");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to update product");
+      }
 
       const savedProduct = await response.json();
       // Update local state
