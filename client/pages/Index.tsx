@@ -230,87 +230,100 @@ export default function Index({ language }: IndexProps) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Slogan 1 */}
-            <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-              <div className="relative h-64 bg-gradient-green flex items-center justify-center overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=500&h=300&fit=crop"
-                  alt="renovation"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
-              </div>
-              <div className="p-6">
-                <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
-                  {language === "ar" ? "مع دارنا جديدك حبو ...و قديمك نقدرو" : language === "fr" ? "Avec darna, valorisez le nouveau et respectez l'ancien" : "With darna, love your new and appreciate your old"}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {language === "ar" ? "نحافظ على قيمة ممتلكاتك مع تحديثها بأحدث الأساليب" : language === "fr" ? "Préservez la valeur de votre propriété tout en la modernisant" : "Preserve your property value while modernizing it"}
-                </p>
-              </div>
-            </div>
+          import { Link } from "react-router-dom";
 
-            {/* Slogan 2 */}
-            <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-              <div className="relative h-64 bg-gradient-green-subtle flex items-center justify-center overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&h=300&fit=crop"
-                  alt="selling"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
-              </div>
-              <div className="p-6">
-                <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
-                  {language === "ar" ? "مع دارنا انت تبيع و غيرك يشري" : language === "fr" ? "Avec darna, vous vendez et d'autres achètent" : "With darna, you sell and others buy"}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {language === "ar" ? "منصة آمنة وموثوقة للبيع والشراء" : language === "fr" ? "Une plateforme sûre et fiable pour vendre et acheter" : "A safe and reliable platform for selling and buying"}
-                </p>
-              </div>
-            </div>
+<div className="grid md:grid-cols-2 gap-8 mb-12">
+  
+  {/* Slogan 1 */}
+  <Link to="/shop" className="block">
+    <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300 cursor-pointer">
+      
+      <div className="relative h-64 bg-gradient-green flex items-center justify-center overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=500&h=300&fit=crop"
+          alt="renovation"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+      </div>
+      <div className="p-6">
+        <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
+          {language === "ar" ? "مع دارنا جديدك حبو ...و قديمك نقدرو" : language === "fr" ? "Avec darna, valorisez le nouveau et respectez l'ancien" : "With darna, love your new and appreciate your old"}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {language === "ar" ? "نحافظ على قيمة ممتلكاتك مع تحديثها بأحدث الأساليب" : language === "fr" ? "Préservez la valeur de votre propriété tout en la modernisant" : "Preserve your property value while modernizing it"}
+        </p>
+      </div>
+    </div>
+  </Link>
 
-            {/* Slogan 3 */}
-            <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-              <div className="relative h-64 bg-gradient-green flex items-center justify-center overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&h=300&fit=crop"
-                  alt="profit"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
-              </div>
-              <div className="p-6">
-                <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
-                  {language === "ar" ? "مع دارنا جدد بيتك و اربح جيبك" : language === "fr" ? "Avec darna, rénovez votre maison et gagnez de l'argent" : "With darna, renovate your home and earn money"}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {language === "ar" ? "استثمر في بيتك وحقق أرباحاً حقيقية" : language === "fr" ? "Investissez dans votre maison et réalisez des profits réels" : "Invest in your home and achieve real profits"}
-                </p>
-              </div>
-            </div>
+  {/* Slogan 2 */}
+  <Link to="/shop" className="block">
+    <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300 cursor-pointer">
+      <div className="relative h-64 bg-gradient-green-subtle flex items-center justify-center overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&h=300&fit=crop"
+          alt="selling"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+      </div>
+      <div className="p-6">
+        <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
+          {language === "ar" ? "مع دارنا انت تبيع و غيرك يشري" : language === "fr" ? "Avec darna, vous vendez et d'autres achètent" : "With darna, you sell and others buy"}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {language === "ar" ? "منصة آمنة وموثوقة للبيع والشراء" : language === "fr" ? "Une plateforme sûre et fiable pour vendre et acheter" : "A safe and reliable platform for selling and buying"}
+        </p>
+      </div>
+    </div>
+  </Link>
 
-            {/* Slogan 4 */}
-            <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300">
-              <div className="relative h-64 bg-gradient-green-light flex items-center justify-center overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1556909029-c2ca60007c5f?w=500&h=300&fit=crop"
-                  alt="sustainability"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
-              </div>
-              <div className="p-6">
-                <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
-                  {language === "ar" ? "مع دارنا: لا شيء يُرمى، كل شيء يُحول" : language === "fr" ? "Rien ne se jette, tout se transforme" : "Nothing is wasted, everything is transformed"}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {language === "ar" ? "استدامة وتحويل ذكي للموارد" : language === "fr" ? "Durabilité et transformation intelligente des ressources" : "Sustainability and smart resource transformation"}
-                </p>
-              </div>
-            </div>
-          </div>
+  {/* Slogan 3 */}
+  <Link to="/shop" className="block">
+    <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300 cursor-pointer">
+      <div className="relative h-64 bg-gradient-green flex items-center justify-center overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500&h=300&fit=crop"
+          alt="profit"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+      </div>
+      <div className="p-6">
+        <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
+          {language === "ar" ? "مع دارنا جدد بيتك و اربح جيبك" : language === "fr" ? "Avec darna, rénovez votre maison et gagnez de l'argent" : "With darna, renovate your home and earn money"}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {language === "ar" ? "استثمر في بيتك وحقق أرباحاً حقيقية" : language === "fr" ? "Investissez dans votre maison et réalisez des profits réels" : "Invest in your home and achieve real profits"}
+        </p>
+      </div>
+    </div>
+  </Link>
+
+  {/* Slogan 4 */}
+  <Link to="/shop" className="block">
+    <div className="group relative rounded-xl overflow-hidden bg-white border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300 cursor-pointer">
+      <div className="relative h-64 bg-gradient-green-light flex items-center justify-center overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1556909029-c2ca60007c5f?w=500&h=300&fit=crop"
+          alt="sustainability"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+      </div>
+      <div className="p-6">
+        <p className="text-lg font-semibold text-foreground leading-relaxed mb-3">
+          {language === "ar" ? "مع دارنا: لا شيء يُرمى، كل شيء يُحول" : language === "fr" ? "Rien ne se jette, tout se transforme" : "Nothing is wasted, everything is transformed"}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {language === "ar" ? "استدامة وتحويل ذكي للموارد" : language === "fr" ? "Durabilité et transformation intelligente des ressources" : "Sustainability and smart resource transformation"}
+        </p>
+      </div>
+    </div>
+  </Link>
+
+</div>
 
           {/* Bottom Slogans */}
           <div className="bg-gradient-to-r from-primary to-secondary text-white rounded-2xl p-8 md:p-12">

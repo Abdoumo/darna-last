@@ -25,11 +25,16 @@ export default function SignIn({ language }: SignInProps) {
 
   const DEFAULT_EMAIL = "bedoushop@gmail.com";
   const DEFAULT_PASSWORD = "bedoushop@gmail.com";
+  const ADMIN_EMAIL = "refurnish246@gmail.com";
+  const ADMIN_PASSWORD = "123456789";
 
   useEffect(() => {
-    if (activeTab === "seller" || activeTab === "admin") {
+    if (activeTab === "seller") {
       setEmail(DEFAULT_EMAIL);
       setPassword(DEFAULT_PASSWORD);
+    } else if (activeTab === "admin") {
+      setEmail(ADMIN_EMAIL);
+      setPassword(ADMIN_PASSWORD);
     } else {
       setEmail("");
       setPassword("");
@@ -112,7 +117,7 @@ export default function SignIn({ language }: SignInProps) {
       }
 
       await new Promise((resolve) => setTimeout(resolve, 800));
-      login(email, password, role as "buyer" | "seller" | "admin");
+      await login(email, password, role as "buyer" | "seller" | "admin");
       if (role === "admin") {
         navigate("/admin/products");
       } else {

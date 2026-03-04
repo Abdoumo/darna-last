@@ -10,7 +10,7 @@ export interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string, role: "buyer" | "seller" | "admin") => void;
+  login: (email: string, password: string, role: "buyer" | "seller" | "admin") => Promise<void>;
   signup: (email: string, password: string, name: string, role: "buyer" | "seller" | "admin") => void;
   logout: () => void;
   isLoading: boolean;
@@ -36,7 +36,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = (email: string, password: string, role: "buyer" | "seller") => {
+  const login = async (email: string, password: string, role: "buyer" | "seller" | "admin") => {
+    // Validate admin credentials
+    if (role === "admin") {
+      const ADMIN_EMAIL = "refurnish246@gmail.com";
+      const ADMIN_PASSWORD = "123456789";
+
+      if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+        throw new Error("Invalid admin credentials");
+      }
+    }
+
     // In a real app, this would validate against a server
     const newUser: User = {
       id: Math.random().toString(36).substr(2, 9),

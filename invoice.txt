@@ -1,0 +1,11 @@
+
+INVOICE
+Date: 2026-03-03 17:23:00
+
+Billed To: Otmane Rachedi Abderrhmane
+
+Description: Development of full-stack application including frontend, backend, AI integration, shop functionality, and external integrations.
+
+Amount Due: 50,000 - 70,000 (currency units)
+
+Thank you for your business!
