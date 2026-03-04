@@ -230,9 +230,7 @@ export default function Index({ language }: IndexProps) {
             </p>
           </div>
 
-          import { Link } from "react-router-dom";
-
-<div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
   
   {/* Slogan 1 */}
   <Link to="/shop" className="block">
