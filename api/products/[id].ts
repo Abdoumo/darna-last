@@ -100,17 +100,5 @@ export default function handler(
     return res.status(200).json(updatedProduct);
   }
 
-  if (req.method === "DELETE") {
-    const productIndex = products.findIndex((p) => p.id === id);
-
-    if (productIndex === -1) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-
-    const deletedProduct = products[productIndex];
-    products = products.filter((p) => p.id !== id);
-    return res.status(200).json(deletedProduct);
-  }
-
   res.status(405).json({ error: "Method not allowed" });
 }
