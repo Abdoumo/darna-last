@@ -18,38 +18,7 @@ interface ShopProps {
 }
 
 // Fallback mock products if API is unavailable
-const fallbackProducts = [
-  {
-    id: "fallback-1",
-    name: "Modern Sofa",
-    price: 129.99,
-    rating: 4.5,
-    reviews: 320,
-    seller: "FurniturePro",
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
-    category: "Home",
-  },
-  {
-    id: "fallback-2",
-    name: "Wooden Dining Table",
-    price: 299.99,
-    rating: 4.8,
-    reviews: 150,
-    seller: "WoodWorks",
-    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&h=300&fit=crop",
-    category: "Home",
-  },
-  {
-    id: "fallback-3",
-    name: "Office Chair Pro",
-    price: 199.99,
-    rating: 4.7,
-    reviews: 450,
-    seller: "OfficeHub",
-    image: "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=400&h=300&fit=crop",
-    category: "Home",
-  },
-];
+const fallbackProducts: Product[] = [];
 
 interface Product {
   id: number | string;
