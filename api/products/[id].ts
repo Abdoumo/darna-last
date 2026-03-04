@@ -1,4 +1,9 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export interface Product {
   id: string;
@@ -11,12 +16,12 @@ export interface Product {
   reviews: number;
   description?: string;
   stock?: number;
+  sellerId?: string;
+  sellerEmail?: string;
+  createdAt?: string;
 }
 
-// In-memory storage for products
-let products: Product[] = [];
-
-export default function handler(
+export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
@@ -32,48 +37,61 @@ export default function handler(
 
   const id = req.query.id as string;
 
-  if (req.method === "GET") {
-    const product = products.find((p) => p.id === id);
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-    return res.status(200).json(product);
-  }
+  try {
+    if (req.method === "GET") {
+      const { data: product, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-  if (req.method === "PUT") {
-    const { name, price, category, seller, image, description, stock } = req.body;
-
-    const productIndex = products.findIndex((p) => p.id === id);
-    if (productIndex === -1) {
-      return res.status(404).json({ error: "Product not found" });
+      if (error) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+      return res.status(200).json(product);
     }
 
-    const updatedProduct: Product = {
-      ...products[productIndex],
-      name: name || products[productIndex].name,
-      price: price !== undefined ? price : products[productIndex].price,
-      category: category || products[productIndex].category,
-      seller: seller || products[productIndex].seller,
-      image: image || products[productIndex].image,
-      description: description !== undefined ? description : products[productIndex].description,
-      stock: stock !== undefined ? stock : products[productIndex].stock,
-    };
+    if (req.method === "PUT") {
+      const { name, price, category, seller, image, description, stock } = req.body;
 
-    products[productIndex] = updatedProduct;
-    return res.status(200).json(updatedProduct);
-  }
+      const { data: updated, error } = await supabase
+        .from("products")
+        .update({
+          name: name || undefined,
+          price: price !== undefined ? price : undefined,
+          category: category || undefined,
+          seller: seller || undefined,
+          image: image || undefined,
+          description: description !== undefined ? description : undefined,
+          stock: stock !== undefined ? stock : undefined,
+        })
+        .eq("id", id)
+        .select()
+        .single();
 
-  if (req.method === "DELETE") {
-    const productIndex = products.findIndex((p) => p.id === id);
-
-    if (productIndex === -1) {
-      return res.status(404).json({ error: "Product not found" });
+      if (error) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+      return res.status(200).json(updated);
     }
 
-    const deletedProduct = products[productIndex];
-    products = products.filter((p) => p.id !== id);
-    return res.status(200).json(deletedProduct);
-  }
+    if (req.method === "DELETE") {
+      const { data: deleted, error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", id)
+        .select()
+        .single();
 
-  res.status(405).json({ error: "Method not allowed" });
+      if (error) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+      return res.status(200).json(deleted);
+    }
+
+    res.status(405).json({ error: "Method not allowed" });
+  } catch (error) {
+    console.error("Database error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 }
