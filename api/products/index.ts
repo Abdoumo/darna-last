@@ -14,44 +14,7 @@ export interface Product {
 }
 
 // In-memory storage for products
-let products: Product[] = [
-  {
-    id: "1",
-    name: "Modern Sofa",
-    price: 129.99,
-    rating: 4.5,
-    reviews: 320,
-    seller: "FurniturePro",
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
-    category: "Home",
-    description: "Comfortable modern sofa for living rooms",
-    stock: 15,
-  },
-  {
-    id: "2",
-    name: "Wooden Dining Table",
-    price: 299.99,
-    rating: 4.8,
-    reviews: 150,
-    seller: "WoodWorks",
-    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&h=300&fit=crop",
-    category: "Home",
-    description: "Premium wooden dining table",
-    stock: 8,
-  },
-  {
-    id: "3",
-    name: "Office Chair Pro",
-    price: 199.99,
-    rating: 4.7,
-    reviews: 450,
-    seller: "OfficeHub",
-    image: "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=400&h=300&fit=crop",
-    category: "Home",
-    description: "Ergonomic office chair",
-    stock: 20,
-  },
-];
+let products: Product[] = [];
 
 export default function handler(
   req: VercelRequest,
